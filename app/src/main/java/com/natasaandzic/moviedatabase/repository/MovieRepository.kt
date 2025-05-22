@@ -25,4 +25,9 @@ class MovieRepository @Inject constructor(private val movieApiService: MovieApiS
         return movieApiService.getTopRatedMovies(page)
     }
 
+    suspend fun searchMovies(query: String): List<Movie> {
+        return movieApiService.searchMovies(query).results
+    }
+
+
 }

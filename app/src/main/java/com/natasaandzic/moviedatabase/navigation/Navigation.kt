@@ -12,6 +12,7 @@ import com.natasaandzic.moviedatabase.screens.HomeScreen
 import com.natasaandzic.moviedatabase.screens.MovieDetailsScreen
 import com.natasaandzic.moviedatabase.screens.NowPlayingScreen
 import com.natasaandzic.moviedatabase.screens.PopularMoviesScreen
+import com.natasaandzic.moviedatabase.screens.SearchScreen
 import com.natasaandzic.moviedatabase.screens.TopRatedMoviesScreen
 
 sealed class Screen(val route: String) {
@@ -70,8 +71,10 @@ fun MovieAppNavHost(
         composable(Screen.Profile.route) {
             //ProfileScreen()
         }
-        composable(Screen.Search.route) {
-            //Search
+        composable("search") {
+            SearchScreen(onMovieClicked = { id ->
+                navController.navigate(Screen.MovieDetails.createRoute(id))
+            })
         }
     }
 }
