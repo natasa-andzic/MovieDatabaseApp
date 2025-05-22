@@ -26,7 +26,7 @@ fun MovieAppNavHost(navController: NavHostController = rememberNavController()) 
         composable("popular") {
             PopularMoviesScreen()
         }
-        composable("movie_details",
+        composable("movie_details/{id}",
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id") ?: return@composable

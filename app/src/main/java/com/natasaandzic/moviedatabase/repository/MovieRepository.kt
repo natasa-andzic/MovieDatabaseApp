@@ -1,5 +1,6 @@
 package com.natasaandzic.moviedatabase.repository
 
+import android.util.Log
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.data.MovieResponse
 import com.natasaandzic.moviedatabase.data.NowPlayingResponse
@@ -17,6 +18,7 @@ class MovieRepository @Inject constructor(private val movieApiService: MovieApiS
     }
 
     suspend fun getMovie(movieId: Int): Movie {
+        Log.d("Natasa Repository", "Fetched movie: $movieApiService.getMovie(movieId)")
         return movieApiService.getMovie(movieId)
     }
 

@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
@@ -38,6 +40,7 @@ fun MovieDetailsScreen(
 
     val movie by viewModel.movie.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(movieId) {
         viewModel.getMovie(movieId)
@@ -49,7 +52,8 @@ fun MovieDetailsScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp)
+                    .verticalScroll(scrollState)
+                    .padding(16.dp, bottom = 48.dp)
             ) {
                 AsyncImage(
                     model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
@@ -100,7 +104,7 @@ fun MovieDetailsScreen(
                         tint = Color(0xFFFFC107)
                     )
                     Text(
-                        text = rating.toString(),
+                        text = movie.vote_average.toString(),
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(start = 4.dp)
                     )

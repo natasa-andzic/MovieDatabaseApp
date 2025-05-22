@@ -4,6 +4,7 @@ import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.data.MovieResponse
 import com.natasaandzic.moviedatabase.data.NowPlayingResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface MovieApiService {
@@ -24,7 +25,7 @@ interface MovieApiService {
     suspend fun getMovieGenres(): MovieResponse
 
     @GET("movie/{movie_id}")
-    suspend fun getMovie(@Query("movie_id") movieId: Int): Movie
+    suspend fun getMovie(@Path("movie_id") movieId: Int): Movie
 
 
 }
