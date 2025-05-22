@@ -20,7 +20,11 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -73,6 +77,7 @@ fun HomeScreen(
     )
 
     Scaffold(
+        topBar = { AppTopBar(navController) },
         bottomBar = {
             BottomNavigationBar(
                 navController = navController,
@@ -183,7 +188,7 @@ fun HorizontalCategoryItem(
             .clickable {
                 navController.navigate(route)
             }
-            .padding(48.dp),
+            .padding(16.dp),
         style = MaterialTheme.typography.titleLarge
     )
 
@@ -197,4 +202,17 @@ fun HorizontalCategoryItem(
     if (listLoading) {
         CircularProgressIndicator(Modifier.padding(16.dp))
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppTopBar(navController: NavHostController) {
+    CenterAlignedTopAppBar(
+        title = { Text("MovieDB", style = MaterialTheme.typography.titleLarge) },
+        actions = {
+            IconButton(onClick = { navController.navigate("search") }) {
+                Icon(Icons.Default.Search, contentDescription = "Search")
+            }
+        }
+    )
 }

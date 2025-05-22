@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,65 +49,67 @@ fun MovieDetailsScreen(
         CircularProgressIndicator()
     } else {
         movie?.let { movie ->
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(16.dp, bottom = 48.dp)
-            ) {
-                AsyncImage(
-                    model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
-                    contentDescription = movie.title,
+            Scaffold() { innerPadding ->
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(2f / 3f)
-                        .clip(RoundedCornerShape(12.dp)),
-                    contentScale = ContentScale.Crop
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Text(
-                    text = movie.title,
-                    style = MaterialTheme.typography.headlineSmall,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Text(
-                    text = movie.release_date,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-
-                Text(
-                    text = "Overview",
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
-                )
-
-                Text(
-                    text = movie.overview,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 6,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(top = 16.dp)
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                        .padding(innerPadding)
                 ) {
-                    androidx.compose.material3.Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = "Rating",
-                        tint = Color(0xFFFFC107)
+                    AsyncImage(
+                        model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                        contentDescription = movie.title,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(2f / 3f)
+                            .clip(RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop
                     )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Text(
-                        text = movie.vote_average.toString(),
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(start = 4.dp)
+                        text = movie.title,
+                        style = MaterialTheme.typography.headlineSmall,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
                     )
+
+                    Text(
+                        text = movie.release_date,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Gray,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+
+                    Text(
+                        text = "Overview",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(top = 16.dp, bottom = 4.dp)
+                    )
+
+                    Text(
+                        text = movie.overview,
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 6,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(top = 16.dp)
+                    ) {
+                        androidx.compose.material3.Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "Rating",
+                            tint = Color(0xFFFFC107)
+                        )
+                        Text(
+                            text = movie.vote_average.toString(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(start = 4.dp)
+                        )
+                    }
                 }
             }
         } ?: run {
