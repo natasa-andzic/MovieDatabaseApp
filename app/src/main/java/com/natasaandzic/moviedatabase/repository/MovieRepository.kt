@@ -18,7 +18,6 @@ class MovieRepository @Inject constructor(private val movieApiService: MovieApiS
     }
 
     suspend fun getMovie(movieId: Int): Movie {
-        Log.d("Natasa Repository", "Fetched movie: $movieApiService.getMovie(movieId)")
         return movieApiService.getMovie(movieId)
     }
 

@@ -27,10 +27,8 @@ class MovieDetailsViewModel @Inject constructor(
             _isLoading.value = true
             try {
                 val response = repository.getMovie(movieId)
-                Log.d("Natasa MovieViewModel", "Movie response: $response")
                 _movie.value = response
             } catch (e: Exception) {
-                Log.e("Natasa MovieViewModel Error", "Error loading page", e)
             } finally {
                 _isLoading.value = false
             }

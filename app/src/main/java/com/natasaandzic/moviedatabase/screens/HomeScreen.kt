@@ -1,5 +1,6 @@
 package com.natasaandzic.moviedatabase.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,8 +14,15 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -30,12 +38,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.data.Movie
+import com.natasaandzic.moviedatabase.navigation.BottomNavItem
+import com.natasaandzic.moviedatabase.navigation.BottomNavigationBar
 import com.natasaandzic.moviedatabase.viewmodel.NowPlayingViewModel
 import com.natasaandzic.moviedatabase.viewmodel.PopularMoviesViewModel
 import com.natasaandzic.moviedatabase.viewmodel.TopRatedMoviesViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
     navController: NavHostController,
@@ -48,80 +59,60 @@ fun HomeScreen(
     val topRatedMovies by topRatedMoviesViewModel.movies.collectAsState()
     val popularMoviesLoading by popularMoviesViewModel.isLoading.collectAsState()
     val topRatedMoviesLoading by topRatedMoviesViewModel.isLoading.collectAsState()
-
     val nowPlayingMovies by nowPlayingViewModel.movies.collectAsState()
     val nowPlayingMoviesLoading by nowPlayingViewModel.isLoading.collectAsState()
 
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .verticalScroll(scrollState)
-    ) {
+    val bottomNavItems = listOf(
+        BottomNavItem("Home", "home", Icons.Default.Home),
+        BottomNavItem("Search", "search", Icons.Default.Search),
+        BottomNavItem("Favorites", "favorites", Icons.Default.Favorite),
+        BottomNavItem("Genres", "genres", Icons.Default.LocationOn),
+        BottomNavItem("Profile", "profile", Icons.Default.Person)
+    )
 
-        Text(
-            text = "Popular Movies",
-            modifier = Modifier
-                .clickable {
-                    navController.navigate("popular")
-                }
-                .padding(48.dp),
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        HorizontalMovieList(
-            movies = popularMovies,
-            isLoading = popularMoviesLoading,
-            onEndReached = { popularMoviesViewModel.loadNextPage() },
-            onMovieClicked
-        )
-
-        if (popularMoviesLoading) {
-            CircularProgressIndicator(Modifier.padding(16.dp))
+    Scaffold(
+        bottomBar = {
+            BottomNavigationBar(
+                navController = navController,
+                items = bottomNavItems
+            )
         }
-
-        Text(
-            text = "Top Rated Movies",
+    ) { innerPadding ->
+        Column(
             modifier = Modifier
-                .clickable {
-                    navController.navigate("top_rated")
-                }
-                .padding(48.dp),
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        HorizontalMovieList(
-            movies = topRatedMovies,
-            isLoading = topRatedMoviesLoading,
-            onEndReached = { topRatedMoviesViewModel.loadNextPage() },
-            onMovieClicked
-        )
-
-        if (topRatedMoviesLoading) {
-            CircularProgressIndicator(Modifier.padding(16.dp))
+                .verticalScroll(scrollState)
+                .padding(innerPadding)
+        ) {
+            HorizontalCategoryItem(
+                "Popular movies",
+                "popular",
+                navController,
+                popularMovies,
+                popularMoviesLoading,
+                { popularMoviesViewModel.loadNextPage() },
+                onMovieClicked
+            )
+            HorizontalCategoryItem(
+                "Top rated movies",
+                "top_rated",
+                navController,
+                topRatedMovies,
+                topRatedMoviesLoading,
+                { topRatedMoviesViewModel.loadNextPage() },
+                onMovieClicked
+            )
+            HorizontalCategoryItem(
+                "Now playing",
+                "now_playing",
+                navController,
+                nowPlayingMovies,
+                nowPlayingMoviesLoading,
+                { nowPlayingViewModel.loadNextPage() },
+                onMovieClicked
+            )
         }
-
-        Text(
-            text = "Now Playing Movies",
-            modifier = Modifier
-                .clickable {
-                    navController.navigate("now_playing")
-                }
-                .padding(48.dp),
-            style = MaterialTheme.typography.titleLarge
-        )
-
-        HorizontalMovieList(
-            movies = nowPlayingMovies,
-            isLoading = nowPlayingMoviesLoading,
-            onEndReached = { nowPlayingViewModel.loadNextPage() },
-            onMovieClicked
-        )
-
-        if (nowPlayingMoviesLoading) {
-            CircularProgressIndicator(Modifier.padding(16.dp))
-        }
-
     }
 }
 
@@ -178,5 +169,32 @@ fun MovieItem(movie: Movie, onMovieClicked: (Int) -> Unit) {
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(top = 4.dp)
         )
+    }
+}
+
+@Composable
+fun HorizontalCategoryItem(
+    title: String, route: String, navController: NavHostController, movies: List<Movie>,
+    listLoading: Boolean, onEndReached: () -> Unit, onMovieClicked: (Int) -> Unit
+) {
+    Text(
+        text = title,
+        modifier = Modifier
+            .clickable {
+                navController.navigate(route)
+            }
+            .padding(48.dp),
+        style = MaterialTheme.typography.titleLarge
+    )
+
+    HorizontalMovieList(
+        movies = movies,
+        isLoading = listLoading,
+        onEndReached = onEndReached,
+        onMovieClicked
+    )
+
+    if (listLoading) {
+        CircularProgressIndicator(Modifier.padding(16.dp))
     }
 }

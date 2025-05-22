@@ -4,21 +4,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.natasaandzic.moviedatabase.viewmodel.TopRatedMoviesViewModel
+import com.natasaandzic.moviedatabase.data.Movie
+import com.natasaandzic.moviedatabase.viewmodel.NowPlayingViewModel
 
 @Composable
-fun TopRatedMoviesScreen(
-    viewModel: TopRatedMoviesViewModel = hiltViewModel(),
+fun NowPlayingScreen(
+    viewModel: NowPlayingViewModel = hiltViewModel(),
     onMovieClicked: (Int) -> Unit
 ) {
     val movies by viewModel.movies.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
     MoviesScreen(
-        title = "Top Rated",
+        title = "Now Playing",
         movies = movies,
         isLoading = isLoading,
         onLoadMore = { viewModel.loadNextPage() },
         onMovieClicked = onMovieClicked
     )
+
 }
