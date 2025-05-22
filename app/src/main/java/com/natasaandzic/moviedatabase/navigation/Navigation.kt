@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.natasaandzic.moviedatabase.screens.FavoritesScreen
 import com.natasaandzic.moviedatabase.screens.HomeScreen
 import com.natasaandzic.moviedatabase.screens.MovieDetailsScreen
 import com.natasaandzic.moviedatabase.screens.NowPlayingScreen
@@ -63,7 +64,7 @@ fun MovieAppNavHost(
             MovieDetailsScreen(movieId = id)
         }
         composable(Screen.Favorites.route) {
-            // FavoritesScreen()
+            FavoritesScreen(onMovieClicked = onMovieClicked)
         }
         composable(Screen.Genres.route) {
             //GenresScreen()
@@ -71,10 +72,8 @@ fun MovieAppNavHost(
         composable(Screen.Profile.route) {
             //ProfileScreen()
         }
-        composable("search") {
-            SearchScreen(onMovieClicked = { id ->
-                navController.navigate(Screen.MovieDetails.createRoute(id))
-            })
+        composable(Screen.Search.route) {
+            SearchScreen(onMovieClicked = onMovieClicked)
         }
     }
 }
