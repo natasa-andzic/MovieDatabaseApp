@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.viewmodel.NowPlayingViewModel
 
 @Composable

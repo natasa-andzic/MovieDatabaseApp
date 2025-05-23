@@ -9,6 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.natasaandzic.moviedatabase.screens.FavoritesScreen
+import com.natasaandzic.moviedatabase.screens.GenreMoviesScreen
+import com.natasaandzic.moviedatabase.screens.GenresScreen
 import com.natasaandzic.moviedatabase.screens.HomeScreen
 import com.natasaandzic.moviedatabase.screens.MovieDetailsScreen
 import com.natasaandzic.moviedatabase.screens.NowPlayingScreen
@@ -26,9 +28,12 @@ sealed class Screen(val route: String) {
     }
 
     object Search : Screen("search")
-    object Profile : Screen("profile")
-    object Genres : Screen("genres")
+    object Genres : Screen("genres") // for genre list screen
     object Favorites : Screen("favorites")
+
+    object GenreMoviesScreen : Screen("genres/{genreId}") {
+        fun createRoute(genreId: Int) = "genres/$genreId"
+    }
 }
 
 
@@ -67,11 +72,25 @@ fun MovieAppNavHost(
             FavoritesScreen(onMovieClicked = onMovieClicked)
         }
         composable(Screen.Genres.route) {
-            //GenresScreen()
+            GenresScreen(
+                onGenreClicked = { id ->
+                    navController.navigate(Screen.GenreMoviesScreen.createRoute(id))
+                }
+            )
         }
-        composable(Screen.Profile.route) {
-            //ProfileScreen()
+        composable(
+            route = Screen.GenreMoviesScreen.route,
+            arguments = listOf(navArgument("genreId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val genreId = backStackEntry.arguments?.getInt("genreId") ?: return@composable
+            GenreMoviesScreen(
+                genreId = genreId,
+                onMovieClicked = { movieId ->
+                    navController.navigate(Screen.MovieDetails.createRoute(movieId))
+                }
+            )
         }
+
         composable(Screen.Search.route) {
             SearchScreen(onMovieClicked = onMovieClicked)
         }

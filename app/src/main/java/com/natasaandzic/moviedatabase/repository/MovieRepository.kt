@@ -1,6 +1,8 @@
 package com.natasaandzic.moviedatabase.repository
 
 import android.util.Log
+import com.natasaandzic.moviedatabase.data.Genre
+import com.natasaandzic.moviedatabase.data.GenreResponse
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.data.MovieResponse
 import com.natasaandzic.moviedatabase.data.NowPlayingResponse
@@ -29,5 +31,12 @@ class MovieRepository @Inject constructor(private val movieApiService: MovieApiS
         return movieApiService.searchMovies(query).results
     }
 
+    suspend fun getGenres(): List<Genre> {
+        return movieApiService.getMovieGenres().genres
+    }
+
+    suspend fun getMoviesByGenre(genreId: Int, page: Int): List<Movie> {
+        return movieApiService.discoverMovies(genreId, page).results
+    }
 
 }

@@ -73,7 +73,6 @@ fun HomeScreen(
         BottomNavItem("Search", "search", Icons.Default.Search),
         BottomNavItem("Favorites", "favorites", Icons.Default.Favorite),
         BottomNavItem("Genres", "genres", Icons.Default.LocationOn),
-        BottomNavItem("Profile", "profile", Icons.Default.Person)
     )
 
     Scaffold(
