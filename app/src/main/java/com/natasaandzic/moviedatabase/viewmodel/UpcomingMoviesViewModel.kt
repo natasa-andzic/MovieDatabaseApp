@@ -2,6 +2,7 @@ package com.natasaandzic.moviedatabase.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.natasaandzic.moviedatabase.data.Filter
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,6 +23,10 @@ class UpcomingMoviesViewModel @Inject constructor(
     val isLoading: StateFlow<Boolean> = _isLoading
 
     private var currentPage = 1
+
+    private val _filter = MutableStateFlow(Filter.ALL)
+    val filter: StateFlow<Filter> = _filter
+
 
     init {
         loadNextPage()
@@ -45,4 +50,12 @@ class UpcomingMoviesViewModel @Inject constructor(
         _movies.value = emptyList()
         loadNextPage()
     }
+
+    fun setFilter(newFilter: Filter) {
+        _filter.value = newFilter
+        currentPage = 1
+        _movies.value = emptyList()
+        loadNextPage()
+    }
+
 }
