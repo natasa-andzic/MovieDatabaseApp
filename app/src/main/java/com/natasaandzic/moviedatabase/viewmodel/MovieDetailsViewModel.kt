@@ -24,6 +24,24 @@ class MovieDetailsViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    private val _trailerKey = MutableStateFlow<String?>(null)
+    val trailerKey: StateFlow<String?> = _trailerKey
+
+    fun getTrailer(movieId: Int) {
+        viewModelScope.launch {
+            try {
+                val response = repository.getMovieVideos(movieId)
+                val trailer = response.results.firstOrNull {
+                    it.site == "YouTube" && it.type == "Trailer"
+                }
+                _trailerKey.value = trailer?.key
+            } catch (e: Exception) {
+                _trailerKey.value = null
+            }
+        }
+    }
+
+
     fun getMovie(movieId: Int) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -31,6 +49,7 @@ class MovieDetailsViewModel @Inject constructor(
                 val response = repository.getMovie(movieId)
                 val isFav = dao.isFavorite(movieId)
                 _movie.value = response.copy(isFavorite = isFav)
+                getTrailer(movieId) // 👈 Add this
             } catch (e: Exception) {
                 // Optionally log or handle error
             } finally {
@@ -51,6 +70,8 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 }
+
+
 
 fun Movie.toFavoriteEntity(): FavoriteMovieEntity {
     return FavoriteMovieEntity(

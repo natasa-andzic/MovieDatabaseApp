@@ -4,6 +4,7 @@ import com.natasaandzic.moviedatabase.data.GenreResponse
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.data.MovieResponse
 import com.natasaandzic.moviedatabase.data.NowPlayingResponse
+import com.natasaandzic.moviedatabase.data.VideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -40,5 +41,11 @@ interface MovieApiService {
         @Query("with_genres") genreId: Int,
         @Query("page") page: Int,
     ): MovieResponse
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getMovieVideos(
+        @Path("movie_id") movieId: Int,
+    ): VideoResponse
+
 
 }

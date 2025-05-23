@@ -54,6 +54,9 @@ fun MovieDetailsScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val scrollState = rememberScrollState()
 
+    val trailerKey by viewModel.trailerKey.collectAsState()
+
+
     LaunchedEffect(movieId) {
         viewModel.getMovie(movieId)
     }
@@ -90,6 +93,13 @@ fun MovieDetailsScreen(
                         )
 
                         Spacer(modifier = Modifier.height(16.dp))
+
+                        trailerKey?.let {
+                            YouTubeTrailerPlayer(trailerKey = it)
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
 
                         Text(
                             text = movie.title,

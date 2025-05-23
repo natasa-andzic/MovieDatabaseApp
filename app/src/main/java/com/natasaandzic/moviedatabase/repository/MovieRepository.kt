@@ -4,6 +4,7 @@ import com.natasaandzic.moviedatabase.data.Genre
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.data.MovieResponse
 import com.natasaandzic.moviedatabase.data.NowPlayingResponse
+import com.natasaandzic.moviedatabase.data.VideoResponse
 import com.natasaandzic.moviedatabase.network.MovieApiService
 import javax.inject.Inject
 
@@ -40,6 +41,11 @@ class MovieRepository @Inject constructor(private val movieApiService: MovieApiS
     suspend fun getUpcomingMovies(page: Int): MovieResponse {
         return movieApiService.getUpcomingMovies(page)
     }
+
+    suspend fun getMovieVideos(movieId: Int): VideoResponse {
+        return movieApiService.getMovieVideos(movieId)
+    }
+
 
 
 }
