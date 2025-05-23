@@ -17,7 +17,9 @@ interface MovieApiService {
     suspend fun getTopRatedMovies(@Query("page") page: Int): MovieResponse
 
     @GET("movie/upcoming")
-    suspend fun getUpcomingMovies(): MovieResponse
+    suspend fun getUpcomingMovies(
+        @Query("page") page: Int,
+    ): MovieResponse
 
     @GET("movie/now_playing")
     suspend fun getNowPlayingMovies(@Query("page") page: Int): NowPlayingResponse

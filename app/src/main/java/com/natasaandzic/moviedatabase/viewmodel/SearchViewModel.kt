@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val repository: MovieRepository
@@ -40,7 +42,6 @@ class SearchViewModel @Inject constructor(
                     }
                 }
         }
-
         loadTrendingMovies(reset = true)
     }
 
@@ -68,7 +69,6 @@ class SearchViewModel @Inject constructor(
             try {
                 val response = repository.getPopularMoviesPaged(currentPage)
                 val newMovies = response.results
-
                 _results.value = if (reset) newMovies else _results.value + newMovies
                 currentPage++
             } finally {

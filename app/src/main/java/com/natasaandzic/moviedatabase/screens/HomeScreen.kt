@@ -47,6 +47,7 @@ import com.natasaandzic.moviedatabase.navigation.BottomNavigationBar
 import com.natasaandzic.moviedatabase.viewmodel.NowPlayingViewModel
 import com.natasaandzic.moviedatabase.viewmodel.PopularMoviesViewModel
 import com.natasaandzic.moviedatabase.viewmodel.TopRatedMoviesViewModel
+import com.natasaandzic.moviedatabase.viewmodel.UpcomingMoviesViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -65,6 +66,10 @@ fun HomeScreen(
     val topRatedMoviesLoading by topRatedMoviesViewModel.isLoading.collectAsState()
     val nowPlayingMovies by nowPlayingViewModel.movies.collectAsState()
     val nowPlayingMoviesLoading by nowPlayingViewModel.isLoading.collectAsState()
+
+    val upcomingMoviesViewModel: UpcomingMoviesViewModel = hiltViewModel()
+    val upcomingMovies by upcomingMoviesViewModel.movies.collectAsState()
+    val upcomingMoviesLoading by upcomingMoviesViewModel.isLoading.collectAsState()
 
     val scrollState = rememberScrollState()
 
@@ -114,6 +119,15 @@ fun HomeScreen(
                 nowPlayingMovies,
                 nowPlayingMoviesLoading,
                 { nowPlayingViewModel.loadNextPage() },
+                onMovieClicked
+            )
+            HorizontalCategoryItem(
+                "Upcoming movies",
+                "upcoming",
+                navController,
+                popularMovies,
+                popularMoviesLoading,
+                { popularMoviesViewModel.loadNextPage() },
                 onMovieClicked
             )
         }

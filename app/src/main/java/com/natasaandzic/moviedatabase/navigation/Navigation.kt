@@ -17,12 +17,15 @@ import com.natasaandzic.moviedatabase.screens.NowPlayingScreen
 import com.natasaandzic.moviedatabase.screens.PopularMoviesScreen
 import com.natasaandzic.moviedatabase.screens.SearchScreen
 import com.natasaandzic.moviedatabase.screens.TopRatedMoviesScreen
+import com.natasaandzic.moviedatabase.screens.UpcomingMoviesScreen
 
 sealed class Screen(val route: String) {
     object Home : Screen("home")
     object NowPlaying : Screen("now_playing")
     object Popular : Screen("popular")
     object TopRated : Screen("top_rated")
+    object Upcoming : Screen("upcoming")
+
     object MovieDetails : Screen("movie_details/{id}") {
         fun createRoute(id: Int) = "movie_details/$id"
     }
@@ -55,6 +58,12 @@ fun MovieAppNavHost(
         composable(Screen.NowPlaying.route) {
             NowPlayingScreen(onMovieClicked = onMovieClicked)
         }
+        composable(Screen.Upcoming.route) {
+            UpcomingMoviesScreen(
+                onMovieClicked = onMovieClicked
+            )
+        }
+
         composable(Screen.Popular.route) {
             PopularMoviesScreen(onMovieClicked = onMovieClicked)
         }
