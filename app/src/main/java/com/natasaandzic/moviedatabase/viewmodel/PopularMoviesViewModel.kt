@@ -4,10 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.natasaandzic.moviedatabase.data.Movie
+import com.natasaandzic.moviedatabase.data.RatingFilter
 import com.natasaandzic.moviedatabase.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,8 +22,23 @@ class PopularMoviesViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    private val _ratingFilter = MutableStateFlow(RatingFilter.ALL)
+    val ratingFilter: StateFlow<RatingFilter> = _ratingFilter
+
+    val filteredMovies: StateFlow<List<Movie>> = combine(_movies, _ratingFilter) { allMovies, filter ->
+        allMovies.filter { it.vote_average >= filter.minRating }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList()
+    )
+
     private var currentPage = 1
     private var totalPages = Int.MAX_VALUE
+
+    fun setRatingFilter(filter: RatingFilter) {
+        _ratingFilter.value = filter
+    }
 
     fun loadNextPage() {
         if (_isLoading.value || currentPage > totalPages) return

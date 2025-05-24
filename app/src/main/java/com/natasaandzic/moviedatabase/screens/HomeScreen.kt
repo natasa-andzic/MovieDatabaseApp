@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -42,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.data.Movie
+import com.natasaandzic.moviedatabase.data.RatingFilter
 import com.natasaandzic.moviedatabase.navigation.BottomNavItem
 import com.natasaandzic.moviedatabase.navigation.BottomNavigationBar
 import com.natasaandzic.moviedatabase.viewmodel.NowPlayingViewModel
@@ -60,10 +62,12 @@ fun HomeScreen(
     topRatedMoviesViewModel: TopRatedMoviesViewModel = hiltViewModel(),
     nowPlayingViewModel: NowPlayingViewModel = hiltViewModel()
 ) {
-    val popularMovies by popularMoviesViewModel.movies.collectAsState()
-    val topRatedMovies by topRatedMoviesViewModel.movies.collectAsState()
+    val popularMovies by popularMoviesViewModel.filteredMovies.collectAsState()
     val popularMoviesLoading by popularMoviesViewModel.isLoading.collectAsState()
+
+    val topRatedMovies by topRatedMoviesViewModel.movies.collectAsState()
     val topRatedMoviesLoading by topRatedMoviesViewModel.isLoading.collectAsState()
+
     val nowPlayingMovies by nowPlayingViewModel.movies.collectAsState()
     val nowPlayingMoviesLoading by nowPlayingViewModel.isLoading.collectAsState()
 
@@ -94,45 +98,51 @@ fun HomeScreen(
                 .verticalScroll(scrollState)
                 .padding(innerPadding)
         ) {
+
+            // Movie categories
             HorizontalCategoryItem(
-                "Popular movies",
-                "popular",
-                navController,
-                popularMovies,
-                popularMoviesLoading,
-                { popularMoviesViewModel.loadNextPage() },
-                onMovieClicked
+                title = "Popular movies",
+                route = "popular",
+                navController = navController,
+                movies = popularMovies,
+                listLoading = popularMoviesLoading,
+                onEndReached = { popularMoviesViewModel.loadNextPage() },
+                onMovieClicked = onMovieClicked
             )
+
             HorizontalCategoryItem(
-                "Top rated movies",
-                "top_rated",
-                navController,
-                topRatedMovies,
-                topRatedMoviesLoading,
-                { topRatedMoviesViewModel.loadNextPage() },
-                onMovieClicked
+                title = "Top rated movies",
+                route = "top_rated",
+                navController = navController,
+                movies = topRatedMovies,
+                listLoading = topRatedMoviesLoading,
+                onEndReached = { topRatedMoviesViewModel.loadNextPage() },
+                onMovieClicked = onMovieClicked
             )
+
             HorizontalCategoryItem(
-                "Now playing",
-                "now_playing",
-                navController,
-                nowPlayingMovies,
-                nowPlayingMoviesLoading,
-                { nowPlayingViewModel.loadNextPage() },
-                onMovieClicked
+                title = "Now playing",
+                route = "now_playing",
+                navController = navController,
+                movies = nowPlayingMovies,
+                listLoading = nowPlayingMoviesLoading,
+                onEndReached = { nowPlayingViewModel.loadNextPage() },
+                onMovieClicked = onMovieClicked
             )
+
             HorizontalCategoryItem(
-                "Upcoming movies",
-                "upcoming",
-                navController,
-                popularMovies,
-                popularMoviesLoading,
-                { popularMoviesViewModel.loadNextPage() },
-                onMovieClicked
+                title = "Upcoming movies",
+                route = "upcoming",
+                navController = navController,
+                movies = upcomingMovies,
+                listLoading = upcomingMoviesLoading,
+                onEndReached = { upcomingMoviesViewModel.loadNextPage() },
+                onMovieClicked = onMovieClicked
             )
         }
     }
 }
+
 
 @Composable
 fun HorizontalMovieList(

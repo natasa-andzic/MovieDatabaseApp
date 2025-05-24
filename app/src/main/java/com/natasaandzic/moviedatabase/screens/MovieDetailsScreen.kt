@@ -67,38 +67,44 @@ fun MovieDetailsScreen(
         }
     } else {
         movie?.let { movie ->
-            Scaffold(
-                floatingActionButton = {
-                    FavoriteButton(
-                        isFavorite = movie.isFavorite,
-                        onClick = {
-                            viewModel.toggleFavorite(movie)
-                        })}
-                    ) { innerPadding ->
-                    Column(
+            Scaffold()
+            { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                        .padding(innerPadding)
+                        .padding(16.dp)
+                ) {
+                    AsyncImage(
+                        model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                        contentDescription = movie.title,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(scrollState)
-                            .padding(innerPadding)
-                            .padding(16.dp)
+                            .fillMaxWidth()
+                            .aspectRatio(2f / 3f)
+                            .clip(RoundedCornerShape(12.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    trailerKey?.let {
+                        YouTubeTrailerPlayer(trailerKey = it)
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(56.dp)
                     ) {
-                        AsyncImage(
-                            model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
-                            contentDescription = movie.title,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(2f / 3f)
-                                .clip(RoundedCornerShape(12.dp)),
-                            contentScale = ContentScale.Crop
-                        )
 
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        trailerKey?.let {
-                            YouTubeTrailerPlayer(trailerKey = it)
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
+                        FavoriteButton(
+                            isFavorite = movie.isFavorite,
+                            onClick = {
+                                viewModel.toggleFavorite(movie)
+                            })
 
 
                         Text(
@@ -107,52 +113,55 @@ fun MovieDetailsScreen(
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
+                    }
 
-                        Text(
-                            text = "Released: ${movie.release_date}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = Color.Gray,
-                            modifier = Modifier.padding(top = 4.dp)
+
+                    Text(
+                        text = "Released: ${movie.release_date}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Gray,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "Rating",
+                            tint = Color(0xFFFFC107)
                         )
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(top = 8.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Star,
-                                contentDescription = "Rating",
-                                tint = Color(0xFFFFC107)
-                            )
-                            Text(
-                                text = movie.vote_average.toString(),
-                                style = MaterialTheme.typography.bodyLarge,
-                                modifier = Modifier.padding(start = 4.dp)
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.height(24.dp))
-
                         Text(
-                            text = "Overview",
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        )
-
-                        Text(
-                            text = movie.overview,
-                            style = MaterialTheme.typography.bodyMedium,
-                            lineHeight = 20.sp
+                            text = movie.vote_average.toString(),
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(start = 4.dp)
                         )
                     }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Text(
+                        text = "Overview",
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+
+                    Text(
+                        text = movie.overview,
+                        style = MaterialTheme.typography.bodyMedium,
+                        lineHeight = 20.sp
+                    )
                 }
-                } ?: run {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Movie not found")
-                    }
-                }
+            }
+        } ?: run {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Movie not found")
+            }
         }
     }
+}
+
 
     @Composable
     fun FavoriteButton(

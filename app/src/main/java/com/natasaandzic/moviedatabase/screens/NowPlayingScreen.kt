@@ -14,6 +14,8 @@ fun NowPlayingScreen(
     val movies by viewModel.movies.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
+    //MovieRatingChips(viewModel)
+
     MoviesScreen(
         title = "Now Playing",
         movies = movies,

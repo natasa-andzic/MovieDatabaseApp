@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -18,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +29,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.data.Movie
+import com.natasaandzic.moviedatabase.data.RatingFilter
+import com.natasaandzic.moviedatabase.viewmodel.PopularMoviesViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -88,4 +94,25 @@ fun MoviePoster(movie: Movie, onClick: () -> Unit) {
             .clip(RoundedCornerShape(6.dp))
             .clickable { onClick() }
     )
+}
+
+@Composable
+fun MovieRatingChips(popularMoviesViewModel: PopularMoviesViewModel) {
+    val ratingFilter by popularMoviesViewModel.ratingFilter.collectAsState()
+
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        RatingFilter.values().forEach { filter ->
+            item {
+                AnimatedFilterChip(
+                    text = filter.label,
+                    selected = ratingFilter == filter,
+                    onClick = { popularMoviesViewModel.setRatingFilter(filter) }
+                )
+            }
+        }
+    }
 }
