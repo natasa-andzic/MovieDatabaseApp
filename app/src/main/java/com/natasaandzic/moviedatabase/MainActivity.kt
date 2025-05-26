@@ -1,15 +1,17 @@
 package com.natasaandzic.moviedatabase
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.natasaandzic.moviedatabase.navigation.MovieAppNavHost
+import com.natasaandzic.moviedatabase.screens.MainScreen
 import com.natasaandzic.moviedatabase.ui.theme.MovieDatabaseTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,6 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private lateinit var navHostController: NavHostController
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -24,10 +28,9 @@ class MainActivity : ComponentActivity() {
             MovieDatabaseTheme {
                 navHostController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MovieAppNavHost(navHostController)
+                    MainScreen(navHostController)
                 }
             }
         }
     }
 }
-

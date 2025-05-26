@@ -77,21 +77,8 @@ fun HomeScreen(
 
     val scrollState = rememberScrollState()
 
-    val bottomNavItems = listOf(
-        BottomNavItem("Home", "home", Icons.Default.Home),
-        BottomNavItem("Search", "search", Icons.Default.Search),
-        BottomNavItem("Favorites", "favorites", Icons.Default.Favorite),
-        BottomNavItem("Genres", "genres", Icons.Default.LocationOn),
-    )
-
     Scaffold(
-        topBar = { AppTopBar(navController) },
-        bottomBar = {
-            BottomNavigationBar(
-                navController = navController,
-                items = bottomNavItems
-            )
-        }
+        topBar = { AppTopBar(navController) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
