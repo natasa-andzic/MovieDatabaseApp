@@ -97,6 +97,7 @@ fun MovieDetailsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .align(Alignment.CenterHorizontally)
                             .height(56.dp)
                     ) {
 
@@ -117,7 +118,7 @@ fun MovieDetailsScreen(
 
 
                     Text(
-                        text = "Released: ${movie.release_date}",
+                        text = "Date of release: ${movie.release_date}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color.Gray,
                         modifier = Modifier.padding(top = 4.dp)

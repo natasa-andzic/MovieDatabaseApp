@@ -5,10 +5,19 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
+println("Available properties:")
+project.properties.forEach { (k, v) -> println("$k = $v") }
+
+val apiKey: String = project.findProperty("TMDB_API_KEY") as? String
+    ?: throw GradleException("TMDB_API_KEY not found in local.properties")
 
 android {
     namespace = "com.natasaandzic.moviedatabase"
     compileSdk = 35
+
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "com.natasaandzic.moviedatabase"
@@ -16,6 +25,7 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+        buildConfigField("String", "TMDB_API_KEY", "\"$apiKey\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -1,5 +1,6 @@
 package com.natasaandzic.moviedatabase.network
 
+import com.natasaandzic.moviedatabase.BuildConfig
 import com.natasaandzic.moviedatabase.Constants
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -13,7 +14,7 @@ class ApiKeyInterceptor : Interceptor {
         val originalUrl = original.url
 
         val newUrl = originalUrl.newBuilder()
-            .addQueryParameter("api_key", Constants.TMDB_API_KEY) // or BuildConfig
+            .addQueryParameter("api_key", BuildConfig.TMDB_API_KEY)
             .build()
 
         val request = original.newBuilder().url(newUrl).build()

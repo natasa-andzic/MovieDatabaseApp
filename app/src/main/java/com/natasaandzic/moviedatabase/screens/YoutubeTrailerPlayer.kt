@@ -17,10 +17,8 @@ fun YouTubeTrailerPlayer(trailerKey: String) {
     AndroidView(
         factory = { context ->
             YouTubePlayerView(context).apply {
-                enableAutomaticInitialization = false // ✅ Disable auto init first
-
+                enableAutomaticInitialization = false
                 lifecycleOwner.lifecycle.addObserver(this)
-
                 initialize(object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
                         youTubePlayer.cueVideo(trailerKey, 0f)

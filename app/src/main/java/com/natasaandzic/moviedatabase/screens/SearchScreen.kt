@@ -130,7 +130,7 @@ fun MovieSearchItem(movie: Movie, onClick: () -> Unit) {
             )
             if (!movie.release_date.isNullOrBlank()) {
                 Text(
-                    text = "Released: ${movie.release_date}",
+                    text = "Date of release: ${movie.release_date}",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )
