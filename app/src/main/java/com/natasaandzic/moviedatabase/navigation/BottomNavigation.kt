@@ -21,11 +21,11 @@ data class BottomNavItem(
 
 @Composable
 fun BottomNavigationBar(
-    navController: NavController,
+    navController: NavHostController,
     items: List<BottomNavItem>
 ) {
-    val currentRoute = navController
-        .currentBackStackEntryAsState().value?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     NavigationBar {
         items.forEach { item ->
@@ -35,8 +35,10 @@ fun BottomNavigationBar(
                 selected = currentRoute == item.route,
                 onClick = {
                     if (currentRoute != item.route) {
+                        // Pop to Home if it's in the back stack
+                        navController.popBackStack(item.route, inclusive = false)
+                        // Navigate or reselect
                         navController.navigate(item.route) {
-                            popUpTo(Screen.Home.route) { saveState = true }
                             launchSingleTop = true
                             restoreState = true
                         }

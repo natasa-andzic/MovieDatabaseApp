@@ -1,5 +1,6 @@
 package com.natasaandzic.moviedatabase.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
@@ -45,6 +46,7 @@ import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.viewmodel.MovieDetailsViewModel
 import kotlinx.coroutines.delay
 
+@SuppressLint("DefaultLocale")
 @Composable
 fun MovieDetailsScreen(
     movieId: Int,
@@ -76,6 +78,14 @@ fun MovieDetailsScreen(
                         .padding(innerPadding)
                         .padding(16.dp)
                 ) {
+
+                    Text(
+                        text = movie.title,
+                        style = MaterialTheme.typography.headlineSmall,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
                         contentDescription = movie.title,
@@ -94,28 +104,11 @@ fun MovieDetailsScreen(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .align(Alignment.CenterHorizontally)
-                            .height(56.dp)
-                    ) {
-
-                        FavoriteButton(
-                            isFavorite = movie.isFavorite,
-                            onClick = {
-                                viewModel.toggleFavorite(movie)
-                            })
-
-
-                        Text(
-                            text = movie.title,
-                            style = MaterialTheme.typography.headlineSmall,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    }
-
+                    FavoriteButton(
+                        isFavorite = movie.isFavorite,
+                        onClick = {
+                            viewModel.toggleFavorite(movie)
+                        })
 
                     Text(
                         text = "Date of release: ${movie.release_date}",
@@ -134,7 +127,7 @@ fun MovieDetailsScreen(
                             tint = Color(0xFFFFC107)
                         )
                         Text(
-                            text = movie.vote_average.toString(),
+                            text = String.format("%.2f", movie.vote_average),
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.padding(start = 4.dp)
                         )
@@ -164,38 +157,38 @@ fun MovieDetailsScreen(
 }
 
 
-    @Composable
-    fun FavoriteButton(
-        isFavorite: Boolean,
-        onClick: () -> Unit
+@Composable
+fun FavoriteButton(
+    isFavorite: Boolean,
+    onClick: () -> Unit
+) {
+    var animate by remember { mutableStateOf(false) }
+
+    val scale by animateFloatAsState(
+        targetValue = if (animate) 1.4f else 1f,
+        animationSpec = tween(durationMillis = 200),
+        label = "scale"
+    )
+
+    IconButton(
+        onClick = {
+            animate = true
+            onClick()
+        },
+        modifier = Modifier.scale(scale)
     ) {
-        var animate by remember { mutableStateOf(false) }
-
-        val scale by animateFloatAsState(
-            targetValue = if (animate) 1.4f else 1f,
-            animationSpec = tween(durationMillis = 200),
-            label = "scale"
+        Icon(
+            imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+            contentDescription = "Favorite",
+            tint = if (isFavorite) Color.Red else Color.Gray
         )
+    }
 
-        IconButton(
-            onClick = {
-                animate = true
-                onClick()
-            },
-            modifier = Modifier.scale(scale)
-        ) {
-            Icon(
-                imageVector = if (isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                contentDescription = "Favorite",
-                tint = if (isFavorite) Color.Red else Color.Gray
-            )
-        }
-
-        // Reset scale after animation
-        LaunchedEffect(animate) {
-            if (animate) {
-                delay(200)
-                animate = false
-            }
+    // Reset scale after animation
+    LaunchedEffect(animate) {
+        if (animate) {
+            delay(200)
+            animate = false
         }
     }
+}

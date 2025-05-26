@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -16,10 +15,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -41,11 +36,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.data.Movie
-import com.natasaandzic.moviedatabase.data.RatingFilter
-import com.natasaandzic.moviedatabase.navigation.BottomNavItem
-import com.natasaandzic.moviedatabase.navigation.BottomNavigationBar
+import com.natasaandzic.moviedatabase.navigation.Screen
 import com.natasaandzic.moviedatabase.viewmodel.NowPlayingViewModel
 import com.natasaandzic.moviedatabase.viewmodel.PopularMoviesViewModel
 import com.natasaandzic.moviedatabase.viewmodel.TopRatedMoviesViewModel
@@ -77,9 +71,7 @@ fun HomeScreen(
 
     val scrollState = rememberScrollState()
 
-    Scaffold(
-        topBar = { AppTopBar(navController) }
-    ) { innerPadding ->
+    Scaffold { innerPadding ->
         Column(
             modifier = Modifier
                 .verticalScroll(scrollState)
@@ -217,11 +209,27 @@ fun HorizontalCategoryItem(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppTopBar(navController: NavHostController) {
+    val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    val title = when (currentRoute) {
+        Screen.Home.route -> "MovieDB"
+        Screen.Search.route -> "Search"
+        Screen.Favorites.route -> "Favorites"
+        Screen.Genres.route -> "Genres"
+        Screen.GenreMoviesScreen.route -> "Movies"
+        Screen.NowPlaying.route -> "Now playing"
+        Screen.Popular.route -> "Popular"
+        Screen.TopRated.route -> "Top rated"
+        Screen.Upcoming.route -> "Upcoming"
+        else -> "MovieDB"
+    }
+
     CenterAlignedTopAppBar(
-        title = { Text("MovieDB", style = MaterialTheme.typography.titleLarge) },
+        title = { Text(title) },
         actions = {
-            IconButton(onClick = { navController.navigate("search") }) {
-                Icon(Icons.Default.Search, contentDescription = "Search")
+            if (currentRoute != Screen.Search.route) {
+                IconButton(onClick = { navController.navigate(Screen.Search.route) }) {
+                    Icon(Icons.Default.Search, contentDescription = "Search")
+                }
             }
         }
     )

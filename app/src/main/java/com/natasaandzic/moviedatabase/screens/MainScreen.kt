@@ -4,7 +4,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
@@ -39,8 +38,18 @@ fun MainScreen(
         BottomNavItem("Favorites", Screen.Favorites.route, Icons.Default.Favorite),
         BottomNavItem("Genres", Screen.Genres.route, Icons.Default.List)
     )
+    val currentBackStackEntry = navController.currentBackStackEntryAsState().value
+
+    val routesWithoutTopBar = listOf(Screen.MovieDetails.route)
+    val currentRoute = currentBackStackEntry?.destination?.route
+
 
     Scaffold(
+        topBar = {
+            if (currentRoute !in routesWithoutTopBar) {
+                AppTopBar(navController)
+            }
+        },
         bottomBar = {
             BottomNavigationBar(
                 navController = navController,
