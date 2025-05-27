@@ -19,7 +19,6 @@ fun PopularMoviesScreen(
         MovieRatingChips(viewModel)
 
         MoviesScreen(
-            title = "Popular Movies",
             movies = movies,
             isLoading = isLoading,
             onLoadMore = { viewModel.loadNextPage() },

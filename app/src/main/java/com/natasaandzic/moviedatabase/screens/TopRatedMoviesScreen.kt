@@ -15,7 +15,6 @@ fun TopRatedMoviesScreen(
     val isLoading by viewModel.isLoading.collectAsState()
 
     MoviesScreen(
-        title = "Top Rated",
         movies = movies,
         isLoading = isLoading,
         onLoadMore = { viewModel.loadNextPage() },

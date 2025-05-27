@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.map
 
 @Composable
 fun MoviesScreen(
-    title: String,
     movies: List<Movie>,
     isLoading: Boolean,
     onLoadMore: () -> Unit,
@@ -56,12 +55,6 @@ fun MoviesScreen(
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(
-            text = title,
-            modifier = Modifier.padding(24.dp),
-            style = MaterialTheme.typography.titleLarge
-        )
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             state = listState,

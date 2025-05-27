@@ -22,7 +22,6 @@ fun NowPlayingScreen(
         onRefresh = { viewModel.refresh() }
     ) {
         MoviesScreen(
-            title = "Now Playing",
             movies = movies,
             isLoading = isLoading,
             onLoadMore = { viewModel.loadNextPage() },
