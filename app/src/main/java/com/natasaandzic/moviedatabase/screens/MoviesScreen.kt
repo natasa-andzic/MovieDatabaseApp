@@ -98,7 +98,7 @@ fun MovieRatingChips(popularMoviesViewModel: PopularMoviesViewModel) {
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        RatingFilter.values().forEach { filter ->
+        RatingFilter.entries.forEach { filter ->
             item {
                 AnimatedFilterChip(
                     text = filter.label,

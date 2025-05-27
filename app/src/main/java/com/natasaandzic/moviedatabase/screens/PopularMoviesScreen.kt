@@ -12,14 +12,14 @@ fun PopularMoviesScreen(
     viewModel: PopularMoviesViewModel = hiltViewModel(),
     onMovieClicked: (Int) -> Unit
 ) {
-    val movies by viewModel.movies.collectAsState()
+    val filteredMovies by viewModel.filteredMovies.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     Column {
 
         MovieRatingChips(viewModel)
 
         MoviesScreen(
-            movies = movies,
+            movies = filteredMovies,
             isLoading = isLoading,
             onLoadMore = { viewModel.loadNextPage() },
             onMovieClicked = onMovieClicked

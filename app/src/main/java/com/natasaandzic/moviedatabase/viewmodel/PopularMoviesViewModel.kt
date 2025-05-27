@@ -26,12 +26,10 @@ class PopularMoviesViewModel @Inject constructor(
     val ratingFilter: StateFlow<RatingFilter> = _ratingFilter
 
     val filteredMovies: StateFlow<List<Movie>> = combine(_movies, _ratingFilter) { allMovies, filter ->
-        allMovies.filter { it.vote_average >= filter.minRating }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
-    )
+        val lowerBound = filter.minRating
+        val upperBound = lowerBound + 1
+        allMovies.filter { it.vote_average.toFloat() in lowerBound..<upperBound }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     private var currentPage = 1
     private var totalPages = Int.MAX_VALUE
