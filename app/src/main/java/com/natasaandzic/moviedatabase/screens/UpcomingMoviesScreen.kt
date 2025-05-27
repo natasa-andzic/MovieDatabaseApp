@@ -23,10 +23,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -71,57 +69,50 @@ fun UpcomingMoviesScreen(
             }
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Upcoming Movies") })
-        }
-    ) { innerPadding ->
-
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = isLoading),
-            onRefresh = { viewModel.refreshUpcoming() }
-        ) {
-            Column(modifier = Modifier
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(isRefreshing = isLoading),
+        onRefresh = { viewModel.refreshUpcoming() }
+    ) {
+        Column(
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)) {
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                ) {
-                    Filter.entries.forEach { filter ->
-                        item {
-                            AnimatedFilterChip(
-                                text = filter.getLabel(LocalDate.now()),
-                                selected = selectedFilter == filter,
-                                onClick = { viewModel.setFilter(filter) }
-                            )
-                        }
+        ) {
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
+                Filter.entries.forEach { filter ->
+                    item {
+                        AnimatedFilterChip(
+                            text = filter.getLabel(LocalDate.now()),
+                            selected = selectedFilter == filter,
+                            onClick = { viewModel.setFilter(filter) }
+                        )
                     }
                 }
-                if (isLoading && movies.isEmpty()) {
-                    CircularProgressIndicator()
-                } else {
+            }
+            if (isLoading && movies.isEmpty()) {
+                CircularProgressIndicator()
+            } else {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(3),
+                    state = listState,
+                    contentPadding = PaddingValues(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    items(movies) { movie ->
+                        MoviePoster(movie = movie, onClick = { onMovieClicked(movie.id) })
+                    }
 
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(3),
-                        state = listState,
-                        contentPadding = PaddingValues(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier
-                            .fillMaxSize()
-                    ) {
-                        items(movies) { movie ->
-                            MoviePoster(movie = movie, onClick = { onMovieClicked(movie.id) })
-                        }
-
-                        if (isLoading) {
-                            item(span = { GridItemSpan(3) }) {
-                                CircularProgressIndicator(Modifier.padding(16.dp))
-                            }
+                    if (isLoading) {
+                        item(span = { GridItemSpan(3) }) {
+                            CircularProgressIndicator(Modifier.padding(16.dp))
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-package com.natasaandzic.moviedatabase.screens
+package com.natasaandzic.moviedatabase.screens.main
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -6,8 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,6 +22,18 @@ import androidx.navigation.navArgument
 import com.natasaandzic.moviedatabase.navigation.BottomNavItem
 import com.natasaandzic.moviedatabase.navigation.BottomNavigationBar
 import com.natasaandzic.moviedatabase.navigation.Screen
+import com.natasaandzic.moviedatabase.screens.GenreMoviesScreen
+import com.natasaandzic.moviedatabase.screens.MovieDetailsScreen
+import com.natasaandzic.moviedatabase.screens.NowPlayingScreen
+import com.natasaandzic.moviedatabase.screens.PopularMoviesScreen
+import com.natasaandzic.moviedatabase.screens.TopRatedMoviesScreen
+import com.natasaandzic.moviedatabase.screens.UpcomingMoviesScreen
+import com.natasaandzic.moviedatabase.screens.bottom.AppTopBar
+import com.natasaandzic.moviedatabase.screens.bottom.FavoritesScreen
+import com.natasaandzic.moviedatabase.screens.bottom.GenresScreen
+import com.natasaandzic.moviedatabase.screens.bottom.HomeScreen
+import com.natasaandzic.moviedatabase.screens.bottom.SearchScreen
+import com.natasaandzic.moviedatabase.screens.bottom.WatchlistScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -36,13 +49,14 @@ fun MainScreen(
         BottomNavItem("Home", Screen.Home.route, Icons.Default.Home),
         BottomNavItem("Search", Screen.Search.route, Icons.Default.Search),
         BottomNavItem("Favorites", Screen.Favorites.route, Icons.Default.Favorite),
-        BottomNavItem("Genres", Screen.Genres.route, Icons.Default.List)
+        BottomNavItem("Watchlist", Screen.Watchlist.route, Icons.Default.ThumbUp),
+        BottomNavItem("Genres", Screen.Genres.route, Icons.Default.Star)
     )
+
     val currentBackStackEntry = navController.currentBackStackEntryAsState().value
 
     val routesWithoutTopBar = listOf(Screen.MovieDetails.route)
     val currentRoute = currentBackStackEntry?.destination?.route
-
 
     Scaffold(
         topBar = {
@@ -104,6 +118,9 @@ fun MainScreen(
             }
             composable(Screen.Search.route) {
                 SearchScreen(onMovieClicked = onMovieClicked)
+            }
+            composable(Screen.Watchlist.route) {
+                WatchlistScreen(onMovieClicked = onMovieClicked)
             }
         }
     }

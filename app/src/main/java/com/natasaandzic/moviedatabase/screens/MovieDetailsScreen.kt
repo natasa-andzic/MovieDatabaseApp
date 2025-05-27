@@ -23,7 +23,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +42,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.natasaandzic.moviedatabase.ui.YouTubeTrailerPlayer
 import com.natasaandzic.moviedatabase.viewmodel.MovieDetailsViewModel
 import kotlinx.coroutines.delay
 
@@ -58,7 +60,6 @@ fun MovieDetailsScreen(
 
     val trailerKey by viewModel.trailerKey.collectAsState()
 
-
     LaunchedEffect(movieId) {
         viewModel.getMovie(movieId)
     }
@@ -69,13 +70,10 @@ fun MovieDetailsScreen(
         }
     } else {
         movie?.let { movie ->
-            Scaffold()
-            { innerPadding ->
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .verticalScroll(scrollState)
-                        .padding(innerPadding)
                         .padding(16.dp)
                 ) {
 
@@ -85,6 +83,8 @@ fun MovieDetailsScreen(
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     AsyncImage(
                         model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
@@ -103,12 +103,6 @@ fun MovieDetailsScreen(
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
-
-                    FavoriteButton(
-                        isFavorite = movie.isFavorite,
-                        onClick = {
-                            viewModel.toggleFavorite(movie)
-                        })
 
                     Text(
                         text = "Date of release: ${movie.release_date}",
@@ -146,6 +140,21 @@ fun MovieDetailsScreen(
                         style = MaterialTheme.typography.bodyMedium,
                         lineHeight = 20.sp
                     )
+
+                    Row(modifier = Modifier.fillMaxWidth()) {
+
+                        FavoriteButton(
+                            isFavorite = movie.isFavorite,
+                            onClick = {
+                                viewModel.toggleFavorite(movie)
+                            })
+
+                        WatchlistButton(
+                            isInWatchlist = movie.isInWatchlist,
+                            onClick = {
+                                viewModel.toggleWatchlist(movie)
+                            })
+                    }
                 }
             }
         } ?: run {
@@ -154,8 +163,6 @@ fun MovieDetailsScreen(
             }
         }
     }
-}
-
 
 @Composable
 fun FavoriteButton(
@@ -184,7 +191,41 @@ fun FavoriteButton(
         )
     }
 
-    // Reset scale after animation
+    LaunchedEffect(animate) {
+        if (animate) {
+            delay(200)
+            animate = false
+        }
+    }
+}
+
+@Composable
+fun WatchlistButton(
+    isInWatchlist: Boolean,
+    onClick: () -> Unit
+) {
+    var animate by remember { mutableStateOf(false) }
+
+    val scale by animateFloatAsState(
+        targetValue = if (animate) 1.4f else 1f,
+        animationSpec = tween(durationMillis = 200),
+        label = "scale"
+    )
+
+    IconButton(
+        onClick = {
+            animate = true
+            onClick()
+        },
+        modifier = Modifier.scale(scale)
+    ) {
+        Icon(
+            imageVector = if (isInWatchlist) Icons.Default.Star else Icons.Default.Star,
+            contentDescription = "Watchlist",
+            tint = if (isInWatchlist) Color.Blue else Color.Gray
+        )
+    }
+
     LaunchedEffect(animate) {
         if (animate) {
             delay(200)

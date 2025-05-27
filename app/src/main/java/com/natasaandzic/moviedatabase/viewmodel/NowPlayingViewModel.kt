@@ -32,13 +32,14 @@ class NowPlayingViewModel @Inject constructor(
     private var currentPage = 1
     private var totalPages = Int.MAX_VALUE
 
-    val filteredMovies: StateFlow<List<Movie>> = combine(_movies, _ratingFilter) { allMovies, filter ->
-        allMovies.filter { it.vote_average >= filter.minRating }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList()
-    )
+    val filteredMovies: StateFlow<List<Movie>> =
+        combine(_movies, _ratingFilter) { allMovies, filter ->
+            allMovies.filter { it.vote_average >= filter.minRating }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
 
     fun setRatingFilter(filter: RatingFilter) {
         _ratingFilter.value = filter
@@ -54,12 +55,19 @@ class NowPlayingViewModel @Inject constructor(
                 _movies.value += response.results
                 totalPages = response.total_pages
                 currentPage++
-            } catch (_: Exception) {}
+            } catch (_: Exception) {
+            }
             _isLoading.value = false
         }
     }
 
     init {
+        loadNextPage()
+    }
+
+    fun refresh() {
+        currentPage = 1
+        _movies.value = emptyList()
         loadNextPage()
     }
 }

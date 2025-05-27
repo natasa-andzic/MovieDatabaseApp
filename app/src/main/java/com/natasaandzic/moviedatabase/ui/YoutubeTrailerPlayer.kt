@@ -1,4 +1,4 @@
-package com.natasaandzic.moviedatabase.screens
+package com.natasaandzic.moviedatabase.ui
 
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth

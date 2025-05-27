@@ -1,6 +1,5 @@
-package com.natasaandzic.moviedatabase.screens
+package com.natasaandzic.moviedatabase.screens.bottom
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,7 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +45,6 @@ import com.natasaandzic.moviedatabase.viewmodel.UpcomingMoviesViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
     navController: NavHostController,
@@ -71,57 +68,51 @@ fun HomeScreen(
 
     val scrollState = rememberScrollState()
 
-    Scaffold { innerPadding ->
-        Column(
-            modifier = Modifier
-                .verticalScroll(scrollState)
-                .padding(innerPadding)
-        ) {
+    Column(
+        modifier = Modifier
+            .verticalScroll(scrollState)
+    ) {
+        HorizontalCategoryItem(
+            title = "Popular movies",
+            route = "popular",
+            navController = navController,
+            movies = popularMovies,
+            listLoading = popularMoviesLoading,
+            onEndReached = { popularMoviesViewModel.loadNextPage() },
+            onMovieClicked = onMovieClicked
+        )
 
-            // Movie categories
-            HorizontalCategoryItem(
-                title = "Popular movies",
-                route = "popular",
-                navController = navController,
-                movies = popularMovies,
-                listLoading = popularMoviesLoading,
-                onEndReached = { popularMoviesViewModel.loadNextPage() },
-                onMovieClicked = onMovieClicked
-            )
+        HorizontalCategoryItem(
+            title = "Top rated movies",
+            route = "top_rated",
+            navController = navController,
+            movies = topRatedMovies,
+            listLoading = topRatedMoviesLoading,
+            onEndReached = { topRatedMoviesViewModel.loadNextPage() },
+            onMovieClicked = onMovieClicked
+        )
 
-            HorizontalCategoryItem(
-                title = "Top rated movies",
-                route = "top_rated",
-                navController = navController,
-                movies = topRatedMovies,
-                listLoading = topRatedMoviesLoading,
-                onEndReached = { topRatedMoviesViewModel.loadNextPage() },
-                onMovieClicked = onMovieClicked
-            )
+        HorizontalCategoryItem(
+            title = "Now playing",
+            route = "now_playing",
+            navController = navController,
+            movies = nowPlayingMovies,
+            listLoading = nowPlayingMoviesLoading,
+            onEndReached = { nowPlayingViewModel.loadNextPage() },
+            onMovieClicked = onMovieClicked
+        )
 
-            HorizontalCategoryItem(
-                title = "Now playing",
-                route = "now_playing",
-                navController = navController,
-                movies = nowPlayingMovies,
-                listLoading = nowPlayingMoviesLoading,
-                onEndReached = { nowPlayingViewModel.loadNextPage() },
-                onMovieClicked = onMovieClicked
-            )
-
-            HorizontalCategoryItem(
-                title = "Upcoming movies",
-                route = "upcoming",
-                navController = navController,
-                movies = upcomingMovies,
-                listLoading = upcomingMoviesLoading,
-                onEndReached = { upcomingMoviesViewModel.loadNextPage() },
-                onMovieClicked = onMovieClicked
-            )
-        }
+        HorizontalCategoryItem(
+            title = "Upcoming movies",
+            route = "upcoming",
+            navController = navController,
+            movies = upcomingMovies,
+            listLoading = upcomingMoviesLoading,
+            onEndReached = { upcomingMoviesViewModel.loadNextPage() },
+            onMovieClicked = onMovieClicked
+        )
     }
 }
-
 
 @Composable
 fun HorizontalMovieList(
@@ -220,6 +211,7 @@ fun AppTopBar(navController: NavHostController) {
         Screen.Popular.route -> "Popular"
         Screen.TopRated.route -> "Top rated"
         Screen.Upcoming.route -> "Upcoming"
+        Screen.Watchlist.route -> "Watchlist"
         else -> "MovieDB"
     }
 

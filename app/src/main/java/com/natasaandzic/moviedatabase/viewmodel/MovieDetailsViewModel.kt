@@ -1,10 +1,12 @@
 package com.natasaandzic.moviedatabase.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.db.MovieDao
 import com.natasaandzic.moviedatabase.db.FavoriteMovieEntity
+import com.natasaandzic.moviedatabase.db.WatchlistMovieEntity
 import com.natasaandzic.moviedatabase.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,7 +43,6 @@ class MovieDetailsViewModel @Inject constructor(
         }
     }
 
-
     fun getMovie(movieId: Int) {
         viewModelScope.launch {
             _isLoading.value = true
@@ -49,9 +50,10 @@ class MovieDetailsViewModel @Inject constructor(
                 val response = repository.getMovie(movieId)
                 val isFav = dao.isFavorite(movieId)
                 _movie.value = response.copy(isFavorite = isFav)
-                getTrailer(movieId) // 👈 Add this
+                getTrailer(movieId)
             } catch (e: Exception) {
-                // Optionally log or handle error
+                Log.e("MovieDetailsViewModel", "Error loading movie", e)
+                _movie.value = null
             } finally {
                 _isLoading.value = false
             }
@@ -69,9 +71,18 @@ class MovieDetailsViewModel @Inject constructor(
             _movie.value = updated
         }
     }
+    fun toggleWatchlist(movie: Movie) {
+        viewModelScope.launch {
+            val updated = movie.copy(isInWatchlist = !movie.isInWatchlist)
+            if (updated.isInWatchlist) {
+                dao.insertInWatchlist(updated.toWatchlistEntity())
+            } else {
+                dao.deleteFromWatchlist(updated.toWatchlistEntity())
+            }
+            _movie.value = updated
+        }
+    }
 }
-
-
 
 fun Movie.toFavoriteEntity(): FavoriteMovieEntity {
     return FavoriteMovieEntity(
@@ -84,3 +95,13 @@ fun Movie.toFavoriteEntity(): FavoriteMovieEntity {
     )
 }
 
+fun Movie.toWatchlistEntity(): WatchlistMovieEntity {
+    return WatchlistMovieEntity(
+        id = id,
+        title = title,
+        overview = overview,
+        poster_path = poster_path,
+        release_date = release_date,
+        vote_average = vote_average
+    )
+}

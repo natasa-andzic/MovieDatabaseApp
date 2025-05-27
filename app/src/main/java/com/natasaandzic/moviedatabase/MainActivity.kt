@@ -11,7 +11,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.natasaandzic.moviedatabase.screens.MainScreen
+import com.natasaandzic.moviedatabase.screens.main.MainScreen
 import com.natasaandzic.moviedatabase.ui.theme.MovieDatabaseTheme
 import dagger.hilt.android.AndroidEntryPoint
 

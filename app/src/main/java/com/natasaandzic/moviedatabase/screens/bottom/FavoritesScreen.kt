@@ -1,4 +1,4 @@
-package com.natasaandzic.moviedatabase.screens
+package com.natasaandzic.moviedatabase.screens.bottom
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -16,17 +16,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.natasaandzic.moviedatabase.viewmodel.FavoritesViewModel
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.natasaandzic.moviedatabase.db.FavoriteMovieEntity
+import com.natasaandzic.moviedatabase.viewmodel.FavoritesViewModel
 
 @Composable
 fun FavoritesScreen(
@@ -34,25 +36,32 @@ fun FavoritesScreen(
     onMovieClicked: (Int) -> Unit
 ) {
     val favorites by viewModel.favoriteMovies.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
-    if (favorites.isEmpty()) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("No favorites yet.")
-        }
-    } else {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(favorites) { movie ->
-                FavoriteMovieItem(movie, onMovieClicked)
+    SwipeRefresh(
+        modifier = Modifier.fillMaxSize(),
+        state = rememberSwipeRefreshState(isRefreshing = isLoading),
+        onRefresh = { viewModel.refresh() }
+    ) {
+        if (favorites.isEmpty()) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("No favorites yet.")
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(3),
+                contentPadding = PaddingValues(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(favorites) { movie ->
+                    FavoriteMovieItem(movie, onMovieClicked)
+                }
             }
         }
     }
 }
+
 
 @Composable
 fun FavoriteMovieItem(movie: FavoriteMovieEntity, onMovieClicked: (Int) -> Unit) {
@@ -77,4 +86,3 @@ fun FavoriteMovieItem(movie: FavoriteMovieEntity, onMovieClicked: (Int) -> Unit)
         )
     }
 }
-
