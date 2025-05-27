@@ -1,5 +1,7 @@
 package com.natasaandzic.moviedatabase.screens.bottom
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.data.Movie
+import com.natasaandzic.moviedatabase.formatReleaseDate
 import com.natasaandzic.moviedatabase.viewmodel.SearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,6 +96,7 @@ fun SearchScreen(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MovieSearchItem(movie: Movie, onClick: () -> Unit) {
     Row(
@@ -118,12 +122,10 @@ fun MovieSearchItem(movie: Movie, onClick: () -> Unit) {
                 text = movie.title,
                 style = MaterialTheme.typography.titleMedium
             )
-            if (!movie.release_date.isNullOrBlank()) {
+            if (movie.release_date.isNotBlank()) {
                 Text(
-                    text = "Date of release: ${movie.release_date}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
-                )
+                    text = "Date of release: ${formatReleaseDate(movie.release_date)}",
+                    style = MaterialTheme.typography.bodySmall)
             }
             Text(
                 text = movie.overview,

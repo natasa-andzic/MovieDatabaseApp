@@ -62,25 +62,15 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-// Retrofit core
     implementation(libs.retrofit)
-
-// Converter for JSON (Gson is common, you can also use Moshi)
     implementation(libs.converter.gson)
-
-// OkHttp (used under the hood by Retrofit)
+    implementation(libs.okhttp)
     implementation(libs.okhttp)
 
-    implementation(libs.okhttp)
-
-    // Hilt core
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-
-// Optional: Hilt Navigation Compose
     implementation(libs.androidx.hilt.navigation.compose)
 
-// Required for ViewModel injection
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     implementation(libs.coil.compose)
@@ -95,6 +85,8 @@ dependencies {
 
     implementation(libs.core)
 
+    implementation(libs.glide)
+    kapt(libs.compiler)
 
     configurations.all {
         resolutionStrategy {

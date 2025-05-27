@@ -2,6 +2,7 @@ package com.natasaandzic.moviedatabase.navigation
 
 sealed class Screen(val route: String) {
     object Home : Screen("Home")
+    object Splash: Screen("splash")
     object NowPlaying : Screen("now_playing")
     object Popular : Screen("popular")
     object TopRated : Screen("top_rated")

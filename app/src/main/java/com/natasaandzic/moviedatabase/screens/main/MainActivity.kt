@@ -1,4 +1,4 @@
-package com.natasaandzic.moviedatabase
+package com.natasaandzic.moviedatabase.screens.main
 
 import android.os.Build
 import android.os.Bundle
@@ -11,7 +11,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.natasaandzic.moviedatabase.screens.main.MainScreen
 import com.natasaandzic.moviedatabase.ui.theme.MovieDatabaseTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,8 +26,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             MovieDatabaseTheme {
                 navHostController = rememberNavController()
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainScreen(navHostController)
+                Scaffold(modifier = Modifier.Companion.fillMaxSize()) { innerPadding ->
+                    AppRoot()
                 }
             }
         }

@@ -19,6 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.natasaandzic.moviedatabase.R
 import com.natasaandzic.moviedatabase.navigation.BottomNavItem
 import com.natasaandzic.moviedatabase.navigation.BottomNavigationBar
 import com.natasaandzic.moviedatabase.navigation.Screen
@@ -47,11 +48,11 @@ fun MainScreen(
     }
 
     val bottomNavItems = listOf(
-        BottomNavItem("Home", Screen.Home.route, Icons.Default.Home),
-        BottomNavItem("Search", Screen.Search.route, Icons.Default.Search),
-        BottomNavItem("Favorites", Screen.Favorites.route, Icons.Default.Favorite),
-        BottomNavItem("Watchlist", Screen.Watchlist.route, Icons.Default.Star),
-        BottomNavItem("Genres", Screen.Genres.route, Icons.Default.Info)
+        BottomNavItem("Home", Screen.Home.route, R.drawable.ic_home),
+        BottomNavItem("Search", Screen.Search.route, R.drawable.ic_search),
+        BottomNavItem("Favorites", Screen.Favorites.route, R.drawable.ic_favorite),
+        BottomNavItem("Watchlist", Screen.Watchlist.route, R.drawable.ic_watchlist),
+        BottomNavItem("Genres", Screen.Genres.route, R.drawable.ic_genres)
     )
 
     val currentBackStackEntry = navController.currentBackStackEntryAsState().value
@@ -77,6 +78,9 @@ fun MainScreen(
             startDestination = Screen.Home.route,
             modifier = modifier.padding(innerPadding)
         ) {
+            composable(Screen.Splash.route) {
+                SplashScreen(navController)
+            }
             composable(Screen.Home.route) {
                 HomeScreen(navController, onMovieClicked = onMovieClicked)
             }
