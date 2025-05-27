@@ -21,7 +21,7 @@ fun AppRoot() {
             SplashScreen(navController = rootNavController)
         }
         composable("main") {
-            MainScreen() // this has its own NavHost for bottom nav
+            MainScreen()
         }
     }
 }

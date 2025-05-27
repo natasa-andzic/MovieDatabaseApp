@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -36,7 +35,7 @@ fun BottomNavigationBar(
             NavigationBarItem(
                 icon = { Icon(painter = painterResource(id = item.icon),
                     contentDescription = item.label,
-                       modifier = Modifier.size(30.dp))},
+                       modifier = Modifier.size(24.dp))},
                 label = { Text(item.label) },
                 selected = currentRoute == item.route,
                 onClick = {
