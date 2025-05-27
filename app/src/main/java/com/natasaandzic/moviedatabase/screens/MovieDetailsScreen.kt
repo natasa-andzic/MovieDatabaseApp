@@ -42,8 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.natasaandzic.moviedatabase.formatReleaseDate
 import com.natasaandzic.moviedatabase.ui.YouTubeTrailerPlayer
 import com.natasaandzic.moviedatabase.viewmodel.MovieDetailsViewModel
 import kotlinx.coroutines.delay
@@ -70,99 +69,102 @@ fun MovieDetailsScreen(
         }
     } else {
         movie?.let { movie ->
-                Column(
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .padding(16.dp)
+            ) {
+
+                Text(
+                    text = movie.title,
+                    style = MaterialTheme.typography.headlineSmall,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                AsyncImage(
+                    model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
+                    contentDescription = movie.title,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState)
-                        .padding(16.dp)
+                        .fillMaxWidth()
+                        .aspectRatio(2f / 3f)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = ContentScale.Crop
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                trailerKey?.let {
+                    YouTubeTrailerPlayer(trailerKey = it)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Text(
+                    text = "Date of release: ${formatReleaseDate(movie.release_date)}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(top = 8.dp)
                 ) {
-
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = "Rating",
+                        tint = Color(0xFFFFC107)
+                    )
                     Text(
-                        text = movie.title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
+                        text = if (String.format(
+                                "%.2f",
+                                movie.vote_average
+                            ) == "0.00"
+                        ) "No ratings yet" else (String.format("%.2f", movie.vote_average)),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(start = 4.dp)
                     )
+                }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-                    AsyncImage(
-                        model = "https://image.tmdb.org/t/p/w500${movie.poster_path}",
-                        contentDescription = movie.title,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .aspectRatio(2f / 3f)
-                            .clip(RoundedCornerShape(12.dp)),
-                        contentScale = ContentScale.Crop
-                    )
+                Text(
+                    text = "Overview",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = movie.overview,
+                    style = MaterialTheme.typography.bodyMedium,
+                    lineHeight = 20.sp
+                )
 
-                    trailerKey?.let {
-                        YouTubeTrailerPlayer(trailerKey = it)
-                    }
+                Row(modifier = Modifier.fillMaxWidth().align(Alignment.End)) {
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    FavoriteButton(
+                        isFavorite = movie.isFavorite,
+                        onClick = {
+                            viewModel.toggleFavorite(movie)
+                        })
 
-                    Text(
-                        text = "Date of release: ${movie.release_date}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Gray,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(top = 8.dp)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = "Rating",
-                            tint = Color(0xFFFFC107)
-                        )
-                        Text(
-                            text = String.format("%.2f", movie.vote_average),
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(start = 4.dp)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    Text(
-                        text = "Overview",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-
-                    Text(
-                        text = movie.overview,
-                        style = MaterialTheme.typography.bodyMedium,
-                        lineHeight = 20.sp
-                    )
-
-                    Row(modifier = Modifier.fillMaxWidth()) {
-
-                        FavoriteButton(
-                            isFavorite = movie.isFavorite,
-                            onClick = {
-                                viewModel.toggleFavorite(movie)
-                            })
-
-                        WatchlistButton(
-                            isInWatchlist = movie.isInWatchlist,
-                            onClick = {
-                                viewModel.toggleWatchlist(movie)
-                            })
-                    }
+                    WatchlistButton(
+                        isInWatchlist = movie.isInWatchlist,
+                        onClick = {
+                            viewModel.toggleWatchlist(movie)
+                        })
                 }
             }
-        } ?: run {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Movie not found")
-            }
+        }
+    } ?: run {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text("Movie not found")
         }
     }
+}
 
 @Composable
 fun FavoriteButton(

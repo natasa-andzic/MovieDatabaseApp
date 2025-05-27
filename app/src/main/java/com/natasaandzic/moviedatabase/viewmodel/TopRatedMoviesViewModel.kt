@@ -2,6 +2,7 @@ package com.natasaandzic.moviedatabase.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.natasaandzic.moviedatabase.data.Filter
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.repository.MovieRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,4 +43,5 @@ class TopRatedMoviesViewModel @Inject constructor(
     init {
         loadNextPage()
     }
+
 }

@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -38,6 +39,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.navigation.Screen
+import com.natasaandzic.moviedatabase.ui.theme.Green1
 import com.natasaandzic.moviedatabase.viewmodel.NowPlayingViewModel
 import com.natasaandzic.moviedatabase.viewmodel.PopularMoviesViewModel
 import com.natasaandzic.moviedatabase.viewmodel.TopRatedMoviesViewModel
@@ -217,6 +219,9 @@ fun AppTopBar(navController: NavHostController) {
 
     CenterAlignedTopAppBar(
         title = { Text(title) },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Green1
+        ),
         actions = {
             if (currentRoute != Screen.Search.route) {
                 IconButton(onClick = { navController.navigate(Screen.Search.route) }) {

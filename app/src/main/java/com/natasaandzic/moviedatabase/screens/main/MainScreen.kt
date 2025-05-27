@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -34,6 +34,7 @@ import com.natasaandzic.moviedatabase.screens.bottom.GenresScreen
 import com.natasaandzic.moviedatabase.screens.bottom.HomeScreen
 import com.natasaandzic.moviedatabase.screens.bottom.SearchScreen
 import com.natasaandzic.moviedatabase.screens.bottom.WatchlistScreen
+import com.natasaandzic.moviedatabase.ui.theme.Mint1
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -49,8 +50,8 @@ fun MainScreen(
         BottomNavItem("Home", Screen.Home.route, Icons.Default.Home),
         BottomNavItem("Search", Screen.Search.route, Icons.Default.Search),
         BottomNavItem("Favorites", Screen.Favorites.route, Icons.Default.Favorite),
-        BottomNavItem("Watchlist", Screen.Watchlist.route, Icons.Default.ThumbUp),
-        BottomNavItem("Genres", Screen.Genres.route, Icons.Default.Star)
+        BottomNavItem("Watchlist", Screen.Watchlist.route, Icons.Default.Star),
+        BottomNavItem("Genres", Screen.Genres.route, Icons.Default.Info)
     )
 
     val currentBackStackEntry = navController.currentBackStackEntryAsState().value
@@ -69,7 +70,7 @@ fun MainScreen(
                 navController = navController,
                 items = bottomNavItems
             )
-        }
+        }, containerColor = Mint1
     ) { innerPadding ->
         NavHost(
             navController = navController,

@@ -37,6 +37,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.natasaandzic.moviedatabase.data.Filter
+import com.natasaandzic.moviedatabase.ui.theme.Green1
+import com.natasaandzic.moviedatabase.ui.theme.Green2
 import com.natasaandzic.moviedatabase.viewmodel.UpcomingMoviesViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -54,9 +56,7 @@ fun UpcomingMoviesScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val listState = rememberLazyGridState()
 
-    val filter by viewModel.filter.collectAsState()
     val selectedFilter by viewModel.filter.collectAsState()
-
 
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo }
@@ -128,8 +128,8 @@ fun AnimatedFilterChip(
     onClick: () -> Unit
 ) {
     val backgroundColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.primaryContainer
-        else MaterialTheme.colorScheme.surfaceVariant,
+        targetValue = if (selected) Green2
+        else Green1,
         label = "chipBgColor"
     )
 

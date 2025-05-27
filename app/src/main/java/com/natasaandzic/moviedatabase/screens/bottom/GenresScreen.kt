@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.natasaandzic.moviedatabase.data.Genre
+import com.natasaandzic.moviedatabase.ui.theme.Green1
 import com.natasaandzic.moviedatabase.viewmodel.MovieGenresViewModel
 
 
@@ -53,7 +54,7 @@ fun GenresScreen(
 fun GenreCard(genre: Genre, onClick: () -> Unit) {
     Surface(
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.secondaryContainer,
+        color = Green1,
         modifier = Modifier
             .fillMaxWidth()
             .height(80.dp)
