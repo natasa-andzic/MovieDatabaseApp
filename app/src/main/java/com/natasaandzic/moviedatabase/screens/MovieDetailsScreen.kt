@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.formatReleaseDate
-import com.natasaandzic.moviedatabase.ui.YouTubeTrailerPlayer
+import com.natasaandzic.moviedatabase.ui.TrailerPlayer
 import com.natasaandzic.moviedatabase.viewmodel.MovieDetailsViewModel
 import kotlinx.coroutines.delay
 
@@ -98,7 +98,7 @@ fun MovieDetailsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 trailerKey?.let {
-                    YouTubeTrailerPlayer(trailerKey = it)
+                    TrailerPlayer(videoId = it)
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))

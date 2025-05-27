@@ -3,7 +3,7 @@ accompanistSwiperefresh = "0.32.0"
 agp = "8.9.0"
 coilCompose = "2.5.0"
 converterGson = "2.9.0"
-core = "12.1.0"
+core = "11.1.0"
 glide = "4.16.0"
 hiltCompiler = "2.48"
 hiltNavigationCompose = "1.2.0"
@@ -21,6 +21,11 @@ okhttp = "4.12.0"
 retrofit = "2.9.0"
 navigationComposeJvmstubs = "2.9.0"
 roomRuntime = "2.6.1"
+material = "1.12.0"
+appcompat = "1.7.0"
+constraintlayout = "2.2.1"
+navigationFragmentKtx = "2.9.0"
+navigationUiKtx = "2.9.0"
 
 [libraries]
 accompanist-swiperefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanistSwiperefresh" }
@@ -54,6 +59,11 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-navigation-compose-jvmstubs = { group = "androidx.navigation", name = "navigation-compose-jvmstubs", version.ref = "navigationComposeJvmstubs" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
