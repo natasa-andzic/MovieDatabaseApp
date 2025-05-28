@@ -5,8 +5,6 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
 }
-println("Available properties:")
-project.properties.forEach { (k, v) -> println("$k = $v") }
 
 val apiKey: String = project.findProperty("TMDB_API_KEY") as? String
     ?: throw GradleException("TMDB_API_KEY not found in local.properties")

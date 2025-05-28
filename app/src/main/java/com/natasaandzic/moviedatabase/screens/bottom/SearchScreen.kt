@@ -78,24 +78,27 @@ fun SearchScreen(
                 .padding(vertical = 12.dp)
         )
 
-        if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.padding(16.dp))
-        } else if (results.isEmpty() && query.length > 1) {
-            Text(
-                "No results found",
-                style = AppTypography.labelLarge,
-                modifier = Modifier.padding(16.dp)
-            )
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(results) { movie ->
-                    MovieSearchItem(movie = movie, onClick = { onMovieClicked(movie.id) })
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(results.size) { index ->
+                val movie = results[index]
+                MovieSearchItem(movie = movie, onClick = { onMovieClicked(movie.id) })
+
+                // Trigger pagination when the user reaches the end of the list
+                if (index == results.lastIndex && !isLoading) {
+                    viewModel.loadNextPage()
+                }
+            }
+
+            if (isLoading) {
+                item {
+                    CircularProgressIndicator(modifier = Modifier.padding(16.dp))
                 }
             }
         }
+
     }
 }
 

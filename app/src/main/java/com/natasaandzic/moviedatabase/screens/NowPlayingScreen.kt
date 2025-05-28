@@ -16,7 +16,6 @@ fun NowPlayingScreen(
     val movies by viewModel.movies.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
-    //MovieRatingChips(viewModel)
     SwipeRefresh(
         state = rememberSwipeRefreshState(isRefreshing = isLoading),
         onRefresh = { viewModel.refresh() }
@@ -28,5 +27,4 @@ fun NowPlayingScreen(
             onMovieClicked = onMovieClicked
         )
     }
-
 }

@@ -29,14 +29,19 @@ class SearchViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    private var currentPage = 1
+    private var isLastPage = false
+
     init {
         viewModelScope.launch {
             _query
                 .debounce(400)
                 .distinctUntilChanged()
                 .collectLatest { search ->
+                    currentPage = 1
+                    isLastPage = false
                     if (search.length >= 2) {
-                        performSearch(search)
+                        performSearch(search, reset = true)
                     } else {
                         loadTrendingMovies(reset = true)
                     }
@@ -45,23 +50,36 @@ class SearchViewModel @Inject constructor(
         loadTrendingMovies(reset = true)
     }
 
-
     fun onQueryChanged(newQuery: String) {
         _query.value = newQuery
     }
 
-    private suspend fun performSearch(query: String) {
+    fun loadNextPage() {
+        if (!isLastPage && !_isLoading.value) {
+            viewModelScope.launch {
+                if (_query.value.length >= 2) {
+                    performSearch(_query.value, reset = false)
+                } else {
+                    loadTrendingMovies(reset = false)
+                }
+            }
+        }
+    }
+
+    private suspend fun performSearch(query: String, reset: Boolean) {
         _isLoading.value = true
         try {
-            _results.value = repository.searchMovies(query)
+            val response = repository.searchMoviesPaged(query, currentPage)
+            _results.value = if (reset) response.results else _results.value + response.results
+            currentPage++
+            isLastPage = response.page >= response.total_pages
+        } catch (_: Exception) {
         } finally {
             _isLoading.value = false
         }
     }
 
-    private var currentPage = 1
-
-    private fun loadTrendingMovies(reset: Boolean = false) {
+    private fun loadTrendingMovies(reset: Boolean) {
         if (reset) currentPage = 1
 
         viewModelScope.launch {
@@ -71,11 +89,11 @@ class SearchViewModel @Inject constructor(
                 val newMovies = response.results
                 _results.value = if (reset) newMovies else _results.value + newMovies
                 currentPage++
+                isLastPage = response.page >= response.total_pages
+            } catch (_: Exception) {
             } finally {
                 _isLoading.value = false
             }
         }
     }
-
-
 }

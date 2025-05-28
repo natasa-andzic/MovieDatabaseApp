@@ -41,6 +41,7 @@ import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.navigation.Screen
 import com.natasaandzic.moviedatabase.ui.theme.AppTypography
 import com.natasaandzic.moviedatabase.ui.theme.ToolbarColor
+import com.natasaandzic.moviedatabase.ui.theme.White
 import com.natasaandzic.moviedatabase.viewmodel.NowPlayingViewModel
 import com.natasaandzic.moviedatabase.viewmodel.PopularMoviesViewModel
 import com.natasaandzic.moviedatabase.viewmodel.TopRatedMoviesViewModel
@@ -226,7 +227,7 @@ fun AppTopBar(navController: NavHostController) {
         actions = {
             if (currentRoute != Screen.Search.route) {
                 IconButton(onClick = { navController.navigate(Screen.Search.route) }) {
-                    Icon(Icons.Default.Search, contentDescription = "Search")
+                    Icon(Icons.Default.Search, contentDescription = "Search", tint = White)
                 }
             }
         }

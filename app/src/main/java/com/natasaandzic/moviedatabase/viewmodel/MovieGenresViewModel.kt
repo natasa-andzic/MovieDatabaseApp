@@ -42,12 +42,6 @@ class MovieGenresViewModel @Inject constructor(
     }
 
     private val _genreMap = MutableStateFlow<Map<Int, String>>(emptyMap())
-    val genreMap: StateFlow<Map<Int, String>> = _genreMap
-
-    fun getGenreNameById(id: Int): String {
-        return _genreMap.value[id] ?: "Unknown"
-    }
-
 
     fun loadMoviesByGenre(genreId: Int, reset: Boolean = true) {
         if (reset) {

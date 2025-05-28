@@ -30,7 +30,7 @@ fun TrailerPlayer(
 
                 val listener = object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
-                        youTubePlayer.loadVideo(videoId, 0f)
+                        youTubePlayer.cueVideo(videoId, 0f)
 
                         val uiController = DefaultPlayerUiController(this@apply, youTubePlayer)
                         setCustomPlayerUi(uiController.rootView)
