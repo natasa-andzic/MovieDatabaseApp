@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.natasaandzic.moviedatabase.ui.theme.Green1
+import com.natasaandzic.moviedatabase.ui.theme.ToolbarColor
 
 data class BottomNavItem(
     val label: String,
@@ -29,7 +29,7 @@ fun BottomNavigationBar(
     val currentRoute = navBackStackEntry?.destination?.route
 
     NavigationBar(
-        containerColor = Green1
+        containerColor = ToolbarColor
     ) {
         items.forEach { item ->
             NavigationBarItem(

@@ -1,8 +1,11 @@
 package com.natasaandzic.moviedatabase.screens
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,20 +47,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.formatReleaseDate
 import com.natasaandzic.moviedatabase.ui.TrailerPlayer
+import com.natasaandzic.moviedatabase.ui.theme.AccentColor
+import com.natasaandzic.moviedatabase.ui.theme.AppTypography
 import com.natasaandzic.moviedatabase.viewmodel.MovieDetailsViewModel
 import kotlinx.coroutines.delay
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("DefaultLocale")
 @Composable
 fun MovieDetailsScreen(
     movieId: Int,
     viewModel: MovieDetailsViewModel = hiltViewModel()
 ) {
-    val movie by viewModel.movie.collectAsState()
+    val movieState by viewModel.movie.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
-    val scrollState = rememberScrollState()
-
     val trailerKey by viewModel.trailerKey.collectAsState()
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(movieId) {
         viewModel.getMovie(movieId)
@@ -68,17 +73,16 @@ fun MovieDetailsScreen(
             CircularProgressIndicator()
         }
     } else {
-        movie?.let { movie ->
+        movieState?.let { movie ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(scrollState)
                     .padding(16.dp)
             ) {
-
                 Text(
                     text = movie.title,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = AppTypography.titleLarge,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -105,7 +109,7 @@ fun MovieDetailsScreen(
 
                 Text(
                     text = "Date of release: ${formatReleaseDate(movie.release_date)}",
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = AppTypography.bodyLarge,
                     modifier = Modifier.padding(top = 4.dp)
                 )
 
@@ -119,12 +123,11 @@ fun MovieDetailsScreen(
                         tint = Color(0xFFFFC107)
                     )
                     Text(
-                        text = if (String.format(
-                                "%.2f",
-                                movie.vote_average
-                            ) == "0.00"
-                        ) "No ratings yet" else (String.format("%.2f", movie.vote_average)),
-                        style = MaterialTheme.typography.bodyLarge,
+                        text = if (String.format("%.2f", movie.vote_average) == "0.00")
+                            "No ratings yet"
+                        else
+                            String.format("%.2f", movie.vote_average),
+                        style = AppTypography.bodyLarge,
                         modifier = Modifier.padding(start = 4.dp)
                     )
                 }
@@ -133,38 +136,47 @@ fun MovieDetailsScreen(
 
                 Text(
                     text = "Overview",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = AppTypography.bodyLarge,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
 
                 Text(
                     text = movie.overview,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = AppTypography.bodyLarge,
                     lineHeight = 20.sp
                 )
 
-                Row(modifier = Modifier.fillMaxWidth().align(Alignment.End)) {
+                Spacer(modifier = Modifier.height(24.dp))
 
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
                     FavoriteButton(
                         isFavorite = movie.isFavorite,
                         onClick = {
                             viewModel.toggleFavorite(movie)
-                        })
+                        }
+                    )
 
                     WatchlistButton(
                         isInWatchlist = movie.isInWatchlist,
                         onClick = {
                             viewModel.toggleWatchlist(movie)
-                        })
+                        }
+                    )
                 }
             }
         }
-    } ?: run {
+    }
+
+    if (!isLoading && movieState == null) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             Text("Movie not found")
         }
     }
 }
+
 
 @Composable
 fun FavoriteButton(
@@ -224,7 +236,7 @@ fun WatchlistButton(
         Icon(
             imageVector = if (isInWatchlist) Icons.Default.Star else Icons.Default.Star,
             contentDescription = "Watchlist",
-            tint = if (isInWatchlist) Color.Blue else Color.Gray
+            tint = if (isInWatchlist) AccentColor else Color.Gray
         )
     }
 

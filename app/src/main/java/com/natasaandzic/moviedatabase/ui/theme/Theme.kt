@@ -22,9 +22,9 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Green1,
-    secondary = Green2,
-    tertiary = Mint1
+    primary = ToolbarColor,
+    secondary = AccentColor,
+    tertiary = BackgroundColor
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

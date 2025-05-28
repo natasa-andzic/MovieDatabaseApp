@@ -18,10 +18,10 @@ fun TopRatedMoviesScreen(
     if (isLoading && movies.isEmpty()) {
         CircularProgressIndicator()
     } else
-    MoviesScreen(
-        movies = movies,
-        isLoading = isLoading,
-        onLoadMore = { viewModel.loadNextPage() },
-        onMovieClicked = onMovieClicked
-    )
+        MoviesScreen(
+            movies = movies,
+            isLoading = isLoading,
+            onLoadMore = { viewModel.loadNextPage() },
+            onMovieClicked = onMovieClicked
+        )
 }

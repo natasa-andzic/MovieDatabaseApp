@@ -28,6 +28,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.natasaandzic.moviedatabase.db.FavoriteMovieEntity
+import com.natasaandzic.moviedatabase.ui.theme.AppTypography
 import com.natasaandzic.moviedatabase.viewmodel.FavoritesViewModel
 
 @Composable
@@ -79,7 +80,7 @@ fun FavoriteMovieItem(movie: FavoriteMovieEntity, onMovieClicked: (Int) -> Unit)
         )
         Text(
             text = movie.title,
-            style = MaterialTheme.typography.bodySmall,
+            style = AppTypography.labelLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(top = 4.dp)

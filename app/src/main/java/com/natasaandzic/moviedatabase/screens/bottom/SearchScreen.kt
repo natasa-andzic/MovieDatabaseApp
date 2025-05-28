@@ -38,8 +38,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.formatReleaseDate
+import com.natasaandzic.moviedatabase.ui.theme.AppTypography
+import com.natasaandzic.moviedatabase.ui.theme.White
 import com.natasaandzic.moviedatabase.viewmodel.SearchViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
@@ -60,12 +63,12 @@ fun SearchScreen(
             onValueChange = viewModel::onQueryChanged,
             placeholder = { Text("Search for movies...") },
             leadingIcon = {
-                Icon(Icons.Default.Search, contentDescription = null)
+                Icon(Icons.Default.Search, contentDescription = null, tint = White)
             },
             trailingIcon = {
                 if (query.isNotEmpty()) {
                     IconButton(onClick = { viewModel.onQueryChanged("") }) {
-                        Icon(Icons.Default.Close, contentDescription = "Clear")
+                        Icon(Icons.Default.Close, contentDescription = "Clear", tint = White)
                     }
                 }
             },
@@ -80,7 +83,7 @@ fun SearchScreen(
         } else if (results.isEmpty() && query.length > 1) {
             Text(
                 "No results found",
-                style = MaterialTheme.typography.bodyMedium,
+                style = AppTypography.labelLarge,
                 modifier = Modifier.padding(16.dp)
             )
         } else {
@@ -120,17 +123,17 @@ fun MovieSearchItem(movie: Movie, onClick: () -> Unit) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = movie.title,
-                style = MaterialTheme.typography.titleMedium
+                style = AppTypography.labelLarge
             )
             if (movie.release_date.isNotBlank()) {
                 Text(
                     text = "Date of release: ${formatReleaseDate(movie.release_date)}",
-                    style = MaterialTheme.typography.bodySmall)
+                    style = AppTypography.labelLarge)
             }
             Text(
                 text = movie.overview,
-                style = MaterialTheme.typography.bodySmall,
-                maxLines = 3,
+                style = AppTypography.labelLarge,
+                maxLines = 5,
                 overflow = TextOverflow.Ellipsis
             )
         }

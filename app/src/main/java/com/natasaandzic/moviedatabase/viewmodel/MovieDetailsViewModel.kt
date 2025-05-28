@@ -47,9 +47,7 @@ class MovieDetailsViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val response = repository.getMovie(movieId)
-                val isFav = dao.isFavorite(movieId)
-                _movie.value = response.copy(isFavorite = isFav)
+                refreshMovie(movieId)
                 getTrailer(movieId)
             } catch (e: Exception) {
                 Log.e("MovieDetailsViewModel", "Error loading movie", e)
@@ -62,27 +60,37 @@ class MovieDetailsViewModel @Inject constructor(
 
     fun toggleFavorite(movie: Movie) {
         viewModelScope.launch {
-            val updated = movie.copy(isFavorite = !movie.isFavorite)
-            if (updated.isFavorite) {
-                dao.insertFavorite(updated.toFavoriteEntity())
+            if (!movie.isFavorite) {
+                dao.insertFavorite(movie.toFavoriteEntity())
             } else {
-                dao.deleteFavorite(updated.toFavoriteEntity())
+                dao.deleteFavorite(movie.toFavoriteEntity())
             }
-            _movie.value = updated
+            refreshMovie(movie.id)
         }
     }
+
     fun toggleWatchlist(movie: Movie) {
         viewModelScope.launch {
-            val updated = movie.copy(isInWatchlist = !movie.isInWatchlist)
-            if (updated.isInWatchlist) {
-                dao.insertInWatchlist(updated.toWatchlistEntity())
+            if (!movie.isInWatchlist) {
+                dao.insertInWatchlist(movie.toWatchlistEntity())
             } else {
-                dao.deleteFromWatchlist(updated.toWatchlistEntity())
+                dao.deleteFromWatchlist(movie.toWatchlistEntity())
             }
-            _movie.value = updated
+            refreshMovie(movie.id)
         }
     }
+
+    private suspend fun refreshMovie(movieId: Int) {
+        val response = repository.getMovie(movieId)
+        val isFavorite = dao.isFavorite(movieId)
+        val isInWatchlist = dao.isInWatchlist(movieId)
+        _movie.value = response.copy(
+            isFavorite = isFavorite,
+            isInWatchlist = isInWatchlist
+        )
+    }
 }
+
 
 fun Movie.toFavoriteEntity(): FavoriteMovieEntity {
     return FavoriteMovieEntity(

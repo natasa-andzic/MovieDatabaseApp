@@ -37,8 +37,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.natasaandzic.moviedatabase.data.Filter
-import com.natasaandzic.moviedatabase.ui.theme.Green1
-import com.natasaandzic.moviedatabase.ui.theme.Green2
+import com.natasaandzic.moviedatabase.ui.theme.ToolbarColor
+import com.natasaandzic.moviedatabase.ui.theme.AccentColor
+import com.natasaandzic.moviedatabase.ui.theme.White
 import com.natasaandzic.moviedatabase.viewmodel.UpcomingMoviesViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -128,14 +129,14 @@ fun AnimatedFilterChip(
     onClick: () -> Unit
 ) {
     val backgroundColor by animateColorAsState(
-        targetValue = if (selected) Green2
-        else Green1,
+        targetValue = if (selected) AccentColor
+        else ToolbarColor,
         label = "chipBgColor"
     )
 
     val contentColor by animateColorAsState(
-        targetValue = if (selected) MaterialTheme.colorScheme.onPrimaryContainer
-        else MaterialTheme.colorScheme.onSurfaceVariant,
+        targetValue = if (selected) ToolbarColor
+        else AccentColor,
         label = "chipTextColor"
     )
 
@@ -154,7 +155,7 @@ fun AnimatedFilterChip(
     ) {
         Text(
             text = text,
-            color = contentColor,
+            color = White,
             style = MaterialTheme.typography.labelLarge,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
         )

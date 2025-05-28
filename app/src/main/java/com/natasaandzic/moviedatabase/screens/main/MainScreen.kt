@@ -29,7 +29,7 @@ import com.natasaandzic.moviedatabase.screens.bottom.GenresScreen
 import com.natasaandzic.moviedatabase.screens.bottom.HomeScreen
 import com.natasaandzic.moviedatabase.screens.bottom.SearchScreen
 import com.natasaandzic.moviedatabase.screens.bottom.WatchlistScreen
-import com.natasaandzic.moviedatabase.ui.theme.Mint1
+import com.natasaandzic.moviedatabase.ui.theme.BackgroundColor
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -65,7 +65,7 @@ fun MainScreen(
                 navController = navController,
                 items = bottomNavItems
             )
-        }, containerColor = Mint1
+        }, containerColor = BackgroundColor
     ) { innerPadding ->
         NavHost(
             navController = navController,

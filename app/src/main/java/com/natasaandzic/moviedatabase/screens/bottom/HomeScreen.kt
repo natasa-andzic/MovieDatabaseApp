@@ -39,7 +39,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import coil.compose.AsyncImage
 import com.natasaandzic.moviedatabase.data.Movie
 import com.natasaandzic.moviedatabase.navigation.Screen
-import com.natasaandzic.moviedatabase.ui.theme.Green1
+import com.natasaandzic.moviedatabase.ui.theme.AppTypography
+import com.natasaandzic.moviedatabase.ui.theme.ToolbarColor
 import com.natasaandzic.moviedatabase.viewmodel.NowPlayingViewModel
 import com.natasaandzic.moviedatabase.viewmodel.PopularMoviesViewModel
 import com.natasaandzic.moviedatabase.viewmodel.TopRatedMoviesViewModel
@@ -164,7 +165,7 @@ fun MovieItem(movie: Movie, onMovieClicked: (Int) -> Unit) {
         )
         Text(
             text = movie.title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = AppTypography.labelLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(top = 4.dp)
@@ -184,7 +185,7 @@ fun HorizontalCategoryItem(
                 navController.navigate(route)
             }
             .padding(16.dp),
-        style = MaterialTheme.typography.titleLarge
+        style = AppTypography.titleLarge
     )
 
     HorizontalMovieList(
@@ -220,7 +221,7 @@ fun AppTopBar(navController: NavHostController) {
     CenterAlignedTopAppBar(
         title = { Text(title) },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = Green1
+            containerColor = ToolbarColor
         ),
         actions = {
             if (currentRoute != Screen.Search.route) {

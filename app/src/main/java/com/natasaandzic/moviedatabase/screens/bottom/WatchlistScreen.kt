@@ -27,9 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.natasaandzic.moviedatabase.db.FavoriteMovieEntity
 import com.natasaandzic.moviedatabase.db.WatchlistMovieEntity
-import com.natasaandzic.moviedatabase.viewmodel.FavoritesViewModel
+import com.natasaandzic.moviedatabase.ui.theme.AppTypography
 import com.natasaandzic.moviedatabase.viewmodel.WatchlistViewModel
 
 @Composable
@@ -79,7 +78,7 @@ fun WatchlistMovieItem(movie: WatchlistMovieEntity, onMovieClicked: (Int) -> Uni
         )
         Text(
             text = movie.title,
-            style = MaterialTheme.typography.bodySmall,
+            style = AppTypography.labelLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(top = 4.dp)

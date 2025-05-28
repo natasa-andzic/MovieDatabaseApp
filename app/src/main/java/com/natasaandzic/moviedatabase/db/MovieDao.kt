@@ -29,4 +29,7 @@ interface MovieDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM favorite_movies WHERE id = :movieId)")
     suspend fun isFavorite(movieId: Int): Boolean
+
+    @Query("SELECT EXISTS(SELECT 1 FROM watchlist_movies WHERE id = :movieId)")
+    suspend fun isInWatchlist(movieId: Int): Boolean
 }
